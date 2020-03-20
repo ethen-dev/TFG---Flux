@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    build: .
+    restart: always
+    command: npm run serve
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/usr/app
+      - /usr/app/node_modules
+    environment:
+      - MONGO_STRING=mongodb://<NAME>:<PASSWORD>@db:27017/tfg
+  db:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=tfg
+      - MONGO_INITDB_ROOT_USERNAME=ethen
+      - MONGO_INITDB_ROOT_PASSWORD=fantasyOO*0
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongo:/data/db
+    ports:
+      - '27017:27017'
+volumes:
+  mongo:
+    driver: local
