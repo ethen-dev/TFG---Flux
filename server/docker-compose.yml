@@ -9,8 +9,8 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./:/usr/app
-      - /usr/app/node_modules
+      - ./usr/app
+      - ./usr/app/node_modules
     environment:
       - MONGO_STRING=mongodb://<NAME>:<PASSWORD>@db:27017/tfg
   db:
