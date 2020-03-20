@@ -14,9 +14,11 @@ exports.createBoard = (req, res, next) => {
                 .status(200)
                 .json({
                     status: 'success',
-                    message: 'Board succefully created'
+                    message: 'Board succefully created',
+                    data: {
+                        board: newBoard
+                    }
                 });
-            next();
         })
         .catch(err => {
             res
@@ -25,7 +27,6 @@ exports.createBoard = (req, res, next) => {
                     status: 'fail',
                     message: err
                 });
-            next();
         });
 };
 

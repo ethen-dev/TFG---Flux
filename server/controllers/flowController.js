@@ -14,7 +14,10 @@ exports.createFlow = (req, res, next) => {
                 .status(200)
                 .json({
                     status: 'success',
-                    message: 'Flow succefully created'
+                    message: 'Flow succefully created',
+                    data: {
+                        flow: newFlow
+                    }
                 });
             next();
         })

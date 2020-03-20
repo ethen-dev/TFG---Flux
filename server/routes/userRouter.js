@@ -9,6 +9,7 @@ router
     .route('/:email/:password')
     .post(userController.createUser)
     .get(userController.authUser)
+    .delete(userController.deleteUser)
     
 router
     .route('/:token')

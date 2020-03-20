@@ -42,12 +42,9 @@ exports.createUser = (req, res) => {
 
 exports.authUser = async (req, res) => {
     try {
-        const user = await User.findOne({email: req.params.email, password:req.params.password});
+        const user = await User.findOne({email: req.params.email, password: req.params.password});
         const {_id, email} = user;
         const token = jwt.sign({_id, email}, process.env.SECRET_KEY, {expiresIn: '10m'});
-        
-
-        console.log(expiresDate)
 
         res.cookie('tfg-jwt', token, {
             expires: expirationDate,
@@ -100,6 +97,32 @@ exports.authToken = (req, res) => {
                 status: 'fail',
                 message: `Email ${email} or password incorrect`,
                 auth: false
+            });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const {
+            email,
+            password
+        } = req.params;
+
+        await User.findOneAndDelete({email, password});
+
+        res
+            .status(204)
+            .json({
+                status: 'success',
+                message: 'User succefully deleted',
+                data: null
+            });
+    } catch (err) {
+        res
+            .status(400)
+            .json({
+                status: 'fail',
+                message: err
             });
     }
 };
