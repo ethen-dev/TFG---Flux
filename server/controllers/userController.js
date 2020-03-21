@@ -9,7 +9,7 @@ exports.createUser = (req, res) => {
         password,
     });
 
-    const token = jwt.sign({id: newUser._id, email}, process.env.SECRET_KEY, {expiresIn: '10m'});
+    const token = jwt.sign({id: newUser._id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
 
     res.cookie('tfg-jwt', token, {
         expires: expirationDate,
@@ -22,7 +22,7 @@ exports.createUser = (req, res) => {
                 .status(200)
                 .json({
                     status: 'success',
-                    message: 'User succefully created',
+                    message: 'User successfully created',
                     data: {
                         token,
                         email,
@@ -44,7 +44,7 @@ exports.authUser = async (req, res) => {
     try {
         const user = await User.findOne({email: req.params.email, password: req.params.password});
         const {_id, email} = user;
-        const token = jwt.sign({_id, email}, process.env.SECRET_KEY, {expiresIn: '10m'});
+        const token = jwt.sign({_id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
 
         res.cookie('tfg-jwt', token, {
             expires: expirationDate,
@@ -55,7 +55,7 @@ exports.authUser = async (req, res) => {
             .status(200)
             .json({
                 status: 'success',
-                message: `Succefully log in as ${email}`,
+                message: `Successfully log in as ${email}`,
                 auth: true,
                 data: {
                     token,
@@ -74,20 +74,20 @@ exports.authUser = async (req, res) => {
     }
 };
 
-exports.authToken = (req, res) => {
-    const {token} = req.params;
+exports.authToken = async (req, res) => {
     try {
-        var decoded = jwt.verify(token, process.env.SECRET_KEY);
-        const {_id, email} = decoded;
+        const {token} = req.params;
+        var decoded = jwt.verify(req.cookies[token], process.env.SECRET_KEY);
+        const {id, email} = decoded;
         res
             .status(200)
             .json({
                 status: 'success',
-                message: `Succefully log in as ${email}`,
+                message: `Successfully log in as ${email}`,
                 auth: true,
                 data: {
                     email,
-                    _id
+                    id
                 }
             });
     } catch (err) {
@@ -114,7 +114,7 @@ exports.deleteUser = async (req, res) => {
             .status(204)
             .json({
                 status: 'success',
-                message: 'User succefully deleted',
+                message: 'User successfully deleted',
                 data: null
             });
     } catch (err) {

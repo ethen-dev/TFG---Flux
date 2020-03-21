@@ -17,8 +17,21 @@ export default new Vuex.Store({
   },
   actions: {
     signup({commit}, {email, password}) {
+      Vue.axios.defaults.withCredentials = true;
       Vue.axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}`)
         .then((res) => {
+          const {data} = res.data;
+          commit('changeLoggedUser', {email: data.email, userId: data.id});
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    autoLogin({commit}) {
+      Vue.axios.defaults.withCredentials = true;
+      Vue.axios.get(`${appConfig.apiUrl}/user/token/tfg-jwt`)
+        .then((res) => {
+          console.log(res.data)
           const {data} = res.data;
           commit('changeLoggedUser', {email: data.email, userId: data.id});
         })

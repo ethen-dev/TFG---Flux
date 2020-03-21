@@ -54,6 +54,9 @@ export default {
       return this.boards;
     }
   },
+  mounted() {
+    this.$store.dispatch('autoLogin');
+  },
   methods: {
     submitHandler(data) {
       this.$store.dispatch('signup', data);

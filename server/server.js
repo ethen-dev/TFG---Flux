@@ -19,8 +19,6 @@ mongoose.connect(db, {
     console.log('connected to mongo database succesfully');
 })
 
-console.log(db)
-
 // Start the server //
 app.listen(process.env.PORT, () => {
     console.log('Running with express');
