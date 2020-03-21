@@ -8,6 +8,12 @@ const flowSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        validate: {
+            validator: function (name) {
+                return name.length > 3;
+            },
+            message: () => `flowName is too small`
+        }
     },
     tasks: {
         type: Array,

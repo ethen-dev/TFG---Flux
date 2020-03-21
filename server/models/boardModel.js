@@ -8,6 +8,12 @@ const boardSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        validate: {
+            validator: function (boardName) {
+                return boardName.length > 3;
+            },
+            message: () => `boardName is too small`
+        }
     },
     tags: {
         type: Array,
