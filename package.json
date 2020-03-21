@@ -1,0 +1,20 @@
+{
+  "name": "TFG---Flux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm run serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethen-dev/TFG---Flux.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ethen-dev/TFG---Flux/issues"
+  },
+  "homepage": "https://github.com/ethen-dev/TFG---Flux#readme"
+}
