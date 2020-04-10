@@ -1,24 +1,29 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 import md5 from 'blueimp-md5';
 import {boardStore} from './modules/boardStore';
 import {appConfig} from '../../config/config'
+import axios from 'axios';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    loggedUser: null
+    loggedUser: null,
+    storedModalView: ''
   },
   mutations: {
     changeLoggedUser(state, value) {
       state.loggedUser = value;
-    }
+    },
+    changeActiveModal(state, modalName) {
+      state.storedModalView = modalName;
+    },
   },
   actions: {
     signup({commit}, {email, password}) {
-      Vue.axios.defaults.withCredentials = true;
-      Vue.axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}`)
+      axios.defaults.withCredentials = true;
+      axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}`)
         .then((res) => {
           const {data} = res.data;
           commit('changeLoggedUser', {email: data.email, userId: data.id});
@@ -28,8 +33,8 @@ export default new Vuex.Store({
         })
     },
     autoLogin({commit}) {
-      Vue.axios.defaults.withCredentials = true;
-      Vue.axios.get(`${appConfig.apiUrl}/user/token/tfg-jwt`)
+      axios.defaults.withCredentials = true;
+      axios.get(`${appConfig.apiUrl}/user/token/tfg-jwt`)
         .then((res) => {
           console.log(res.data)
           const {data} = res.data;
@@ -38,7 +43,13 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err);
         })
-    }
+    },
+    openModal({commit}, modalName) {
+      commit('changeActiveModal', modalName);
+    },
+    closeModal({commit}) {
+      commit('changeActiveModal', '');
+    },
   },
   modules: {
     boardStore

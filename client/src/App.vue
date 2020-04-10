@@ -30,13 +30,20 @@
       </div>  
     </div>
     <router-view/>
+    <transition name="fade">
+      <modal v-if="storedModalView"></modal>
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Modal from './components/UI/Modal';
 
 export default {
+  components: {
+    Modal
+  },
   data() {
     return {
       login: {},
@@ -48,10 +55,22 @@ export default {
       app: state => state,
     }),
     loggedUser() {
-      return this.$store.state.loggedUser
+      return this.$store.state.loggedUser;
     },
     boardStore() {
       return this.boards;
+    },
+    storedModalView() {
+      return this.app.storedModalView;
+    }
+  },
+  watch: {
+    loggedUser: {
+      handler: function(newValue) {
+        console.log('user')
+        this.$store.dispatch('boardStore/getBoards', newValue.userId);
+      },
+      deep: true
     }
   },
   mounted() {
@@ -70,6 +89,11 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.view {
+  height: 100vh;
+  padding: 25px;
 }
 
 #app {

@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
             },
             message: () => `Password is too small`
         }
+    },
+    hasBoards: {
+        type: Boolean,
+        default: false
     }
 });
 

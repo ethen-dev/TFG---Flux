@@ -1,0 +1,36 @@
+// Slide
+
+.forward-enter-active,
+.forward-leave-active,
+.backward-enter-active,
+.backward-leave-active {
+    transition: all .5s ease-in-out;
+}
+
+// Left
+
+.forward-enter,
+.forward-leave-to {
+    transform: translateX(-500px);
+    opacity: 0;
+}
+
+// Right
+
+.backward-enter,
+.backward-leave-to {
+    transform: translateX(500px);
+    opacity: 0;
+}
+
+// Fade
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all .5s ease-in-out;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}

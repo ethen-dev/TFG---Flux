@@ -1,4 +1,5 @@
 const Board = require('../models/boardModel');
+const User = require('../models/userModel');
 
 exports.createBoard = (req, res, next) => {
     const {userId, boardName} = req.params;
@@ -7,7 +8,7 @@ exports.createBoard = (req, res, next) => {
         userId,
         name: boardName,
     });
-
+    console.log('creating')
     newBoard.save()
         .then(doc => {
             res
@@ -19,6 +20,7 @@ exports.createBoard = (req, res, next) => {
                         board: newBoard
                     }
                 });
+            next();
         })
         .catch(err => {
             res
@@ -27,6 +29,7 @@ exports.createBoard = (req, res, next) => {
                     status: 'fail',
                     message: err
                 });
+            next();
         });
 };
 
@@ -61,6 +64,12 @@ exports.updateBoard = async (req, res) => {
 exports.getAllBoards = async (req, res) => {
     try {
         const {userId} = req.params;
+        const user = await User.findById(userId);
+        
+        if (!user.hasBoards) {
+            throw new Exception('No Boards found');
+        }
+
         const boards = await Board.find({userId});
 
         res 

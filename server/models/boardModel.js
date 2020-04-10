@@ -18,6 +18,10 @@ const boardSchema = new mongoose.Schema({
     tags: {
         type: Array,
         default: []
+    },
+    hasFlows: {
+        type: Boolean,
+        default: false
     }
 });
 

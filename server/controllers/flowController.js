@@ -35,7 +35,7 @@ exports.createFlow = (req, res, next) => {
 exports.updateFlow = async (req, res) => {
     try {
         const {flowId} = req.params;
-        console.log(req.body)
+        
         const flow = await Flow.findByIdAndUpdate(flowId, req.body, {
             new: true,
             runValidators: true
