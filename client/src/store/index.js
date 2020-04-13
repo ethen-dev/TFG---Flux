@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import md5 from 'blueimp-md5';
 import {boardStore} from './modules/boardStore';
+import {flowStore} from './modules/flowStore';
+import {taskStore} from './modules/taskStore';
 import {appConfig} from '../../config/config'
 import axios from 'axios';
 
@@ -52,6 +54,8 @@ export default new Vuex.Store({
     },
   },
   modules: {
-    boardStore
+    boardStore,
+    flowStore,
+    taskStore
   }
 })

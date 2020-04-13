@@ -46,6 +46,10 @@ exports.authUser = async (req, res) => {
         const {_id, email} = user;
         const token = jwt.sign({_id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
 
+        if (!user) {
+            throw new Exception('User not found')
+        }
+
         res.cookie('tfg-jwt', token, {
             expires: expirationDate,
             httpOnly: true
@@ -79,6 +83,13 @@ exports.authToken = async (req, res) => {
         const {token} = req.params;
         var decoded = jwt.verify(req.cookies[token], process.env.SECRET_KEY);
         const {id, email} = decoded;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            throw new Exception('User not found')
+        }
+
         res
             .status(200)
             .json({
@@ -127,3 +138,30 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+exports.updateUser = async (req, res) => {
+    try {
+        const {userId} = req.params;
+        const user = await User.findByIdAndUpdate(userId, req.body, {
+            new: true,
+            runValidators: true
+        });
+
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: 'User successfully updated',
+                data: {
+                    user
+                }
+            });
+        
+    } catch (err) {
+        res
+            .status(400)
+            .json({
+                status: 'fail',
+                message: err
+            });
+    }
+}

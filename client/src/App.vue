@@ -67,7 +67,6 @@ export default {
   watch: {
     loggedUser: {
       handler: function(newValue) {
-        console.log('user')
         this.$store.dispatch('boardStore/getBoards', newValue.userId);
       },
       deep: true

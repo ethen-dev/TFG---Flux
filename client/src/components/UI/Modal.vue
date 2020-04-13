@@ -10,10 +10,15 @@
 </template>
 
 <script>
+import NewBoard from '../ModalViews/NewBoard';
+import NewFlow from '../ModalViews/NewFlow';
+import NewTask from '../ModalViews/NewTask';
 
 export default {
     components: {
-        
+        NewBoard,
+        NewFlow,
+        NewTask
     },
     computed: {
         storedModalView() {
@@ -47,6 +52,9 @@ export default {
             top: 30%;
             width: 380px;
             min-height: 240px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 </style>

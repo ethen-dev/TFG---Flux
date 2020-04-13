@@ -1,7 +1,14 @@
 const Flow = require('../models/flowModel');
+const Board = require('../models/boardModel');
 
-exports.createFlow = (req, res, next) => {
+exports.createFlow = async (req, res, next) => {
     const {boardId, flowName} = req.params;
+
+    const board = await Board.findById(boardId);
+
+    if (!board) {
+        throw new Exception('Board not found, flow needs to be created at validated board.')
+    }
 
     const newFlow = new Flow({
         boardId,
@@ -9,12 +16,16 @@ exports.createFlow = (req, res, next) => {
     });
 
     newFlow.save()
-        .then(doc => {
+        .then(async () => {
+            await Board.findByIdAndUpdate(boardId, {hasFlows: true}, {
+                new: true,
+                runValidators: true
+            });
             res
                 .status(200)
                 .json({
                     status: 'success',
-                    message: 'Flow succefully created',
+                    message: 'Flow successfully created',
                     data: {
                         flow: newFlow
                     }
@@ -45,7 +56,7 @@ exports.updateFlow = async (req, res) => {
             .status(200)
             .json({
                 status: 'success',
-                message: 'Flow succefully updated',
+                message: 'Flow successfully updated',
                 data: {
                     flow
                 }
@@ -72,7 +83,7 @@ exports.getAllFlows = async (req, res) => {
             .status(200)
             .json({
                 status: 'success',
-                message: `User flows for board ${boardId} succefully readed`,
+                message: `User flows for board ${boardId} successfully readed`,
                 data: {
                     flows
                 }
@@ -98,7 +109,7 @@ exports.deleteFlow = async (req, res) => {
             .status(204)
             .json({
                 status: 'success',
-                message: 'User boards succefully deleted',
+                message: 'User boards successfully deleted',
                 data: null
             });
     } catch (err) {

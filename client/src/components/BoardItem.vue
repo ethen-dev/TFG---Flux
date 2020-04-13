@@ -4,7 +4,7 @@
     @click="boardSubmitHandler"
   >
     <h1>
-      {{boardName}}
+      {{board.name}}
     </h1>
   </div>
 </template>
@@ -13,22 +13,19 @@
 export default {
   name: 'BoardItem',
   props: {
-    boardName: {
-      type: String,
-      default: '+'
-    },
-    boardId: {
-      type: String,
+    board: {
+      type: Object,
       required: true
     }
   },
   methods: {
     boardSubmitHandler() {
-      if (this.boardName === '+') {
-        this.$store.dispatch('openModal', 'newBoardModalView');
+      if (this.board.name === '+') {
+        this.$store.dispatch('openModal', 'NewBoard');
         return;
       }
-      this.$store.dispatch('getBoardData', this.boardId);
+      this.$router.push(`/board/${this.board._id}`);
+      // this.$store.dispatch('getBoardData', this.boardId);
     }
   }
 }

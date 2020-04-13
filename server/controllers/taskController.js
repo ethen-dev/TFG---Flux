@@ -1,33 +1,33 @@
-const Board = require('../models/boardModel');
-const User = require('../models/userModel');
+const Task = require('../models/taskModel');
+const Flow = require('../models/flowModel');
 
-exports.createBoard = async (req, res, next) => {
-    const {userId, boardName} = req.params;
+exports.createTask = async (req, res, next) => {
+    const {flowId, taskName} = req.params;
 
-    const user = await User.findById(userId);
+    const flow = await Flow.findById(flowId);
 
-    if (!user) {
-        throw new Exception('User not found, need valid user to create a board')
+    if (!flow) {
+        throw new Exception('Flow not found, task needs to be created at validated flow.')
     }
 
-    const newBoard = new Board({
-        userId,
-        name: boardName,
+    const newTask = new Task({
+        flowId,
+        name: taskName,
     });
-    
-    newBoard.save()
+
+    newTask.save()
         .then(async () => {
-            await User.findByIdAndUpdate(userId, {hasBoards: true}, {
+            await Flow.findByIdAndUpdate(flowId, {hasTasks: true}, {
                 new: true,
                 runValidators: true
-            });          
+            });
             res
                 .status(200)
                 .json({
                     status: 'success',
-                    message: 'Board successfully created',
+                    message: 'Task successfully created',
                     data: {
-                        board: newBoard,
+                        task: newTask
                     }
                 });
             next();
@@ -43,11 +43,11 @@ exports.createBoard = async (req, res, next) => {
         });
 };
 
-exports.updateBoard = async (req, res) => {
+exports.updateTask = async (req, res) => {
     try {
-        const {boardId} = req.params;
-        console.log(req.body)
-        const board = await Board.findByIdAndUpdate(boardId, req.body, {
+        const {taskId} = req.params;
+        
+        const task = await Task.findByIdAndUpdate(taskId, req.body, {
             new: true,
             runValidators: true
         });
@@ -56,9 +56,9 @@ exports.updateBoard = async (req, res) => {
             .status(200)
             .json({
                 status: 'success',
-                message: 'Board successfully updated',
+                message: 'Task successfully updated',
                 data: {
-                    board
+                    task
                 }
             });
         
@@ -72,24 +72,20 @@ exports.updateBoard = async (req, res) => {
     }
 };
 
-exports.getAllBoards = async (req, res) => {
+exports.getAllTasks = async (req, res) => {
     try {
-        const {userId} = req.params;
-        const user = await User.findById(userId);
-        
-        if (!user.hasBoards) {
-            throw new Exception('No Boards found');
-        }
-
-        const boards = await Board.find({userId});
+        const {flowId} = req.params;
+        const tasks = await Task.find({
+            flowId
+        });
 
         res 
             .status(200)
             .json({
                 status: 'success',
-                message: 'User boards successfully readed',
+                message: `User tasks for flow ${flowId} successfully readed`,
                 data: {
-                    boards
+                    tasks
                 }
             });
         
@@ -103,17 +99,17 @@ exports.getAllBoards = async (req, res) => {
     }
 };
 
-exports.deleteBoard = async (req, res) => {
+exports.deleteTask = async (req, res) => {
     try {
-        const {boardId} = req.params;
+        const {taskId} = req.params;
     
-        await Board.findByIdAndDelete(boardId);
+        await Task.findByIdAndDelete(taskId);
 
         res
             .status(204)
             .json({
                 status: 'success',
-                message: 'User boards successfully deleted',
+                message: 'User flows successfully deleted',
                 data: null
             });
     } catch (err) {

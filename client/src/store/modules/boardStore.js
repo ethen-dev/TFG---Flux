@@ -11,6 +11,9 @@ export const boardStore = {
     mutations: {
         setBoards(state, value) {
             state.boards = value;
+        },
+        pushBoard(state, value) {
+            state.boards.push(value);
         }
     },
     actions: {
@@ -25,7 +28,18 @@ export const boardStore = {
                 .catch((err) => {
                     console.log(err);
                 });
-            
+        },
+        createBoard({commit}, {formValues, userId}) {
+            console.log(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`)
+            Vue.axios.post(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`)
+                .then((res) => {
+                    console.log(res.data)
+                    const { data } = res.data;
+                    commit('pushBoard', data.board);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
 }

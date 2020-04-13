@@ -11,6 +11,7 @@ const app = express();
 const userRouter = require('./routes/userRouter');
 const boardRouter = require('./routes/boardRouter');
 const flowRouter = require('./routes/flowRouter');
+const taskRouter = require('./routes/taskRouter');
 const limiter = rateLimit({
     max: 100,
     windowMs: 60 * 60 * 1000, //1h
@@ -38,8 +39,8 @@ app.use('/api', limiter);
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,UPDATE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
 });
 
@@ -56,6 +57,10 @@ app.use('/api/flow/create', flowRouter)
 app.use('/api/flow/update', flowRouter)
 app.use('/api/flow/getAll', flowRouter)
 app.use('/api/flow/delete', flowRouter)
+app.use('/api/task/create', taskRouter)
+app.use('/api/task/update', taskRouter)
+app.use('/api/task/getAll', taskRouter)
+app.use('/api/task/delete', taskRouter)
 
 module.exports = app;
 

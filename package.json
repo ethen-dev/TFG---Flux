@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ethen-dev/TFG---Flux/issues"
   },
-  "homepage": "https://github.com/ethen-dev/TFG---Flux#readme"
+  "homepage": "https://github.com/ethen-dev/TFG---Flux#readme",
+  "dependencies": {
+    "@braid/vue-formulate": "^2.2.7"
+  }
 }
