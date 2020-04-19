@@ -1,6 +1,9 @@
 <template>
     <div id="modal">
-        <div class="modal-background"></div>
+        <div 
+            class="modal-background"
+            @click="closeModal"
+        ></div>
         <div class="modal-content">
             <component 
                 :is="storedModalView"
@@ -23,7 +26,12 @@ export default {
     computed: {
         storedModalView() {
             return this.$store.state.storedModalView;
-        },
+        }
+    },
+    methods: {
+        closeModal() {
+            this.$store.dispatch('closeModal');
+        }
     }
 }
 </script>
