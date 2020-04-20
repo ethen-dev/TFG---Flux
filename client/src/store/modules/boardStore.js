@@ -36,8 +36,26 @@ export const boardStore = {
                     console.log(err);
                 });
         },
-        createBoard({commit}, {formValues, userId}) {
+        createKanbanBoard({commit}, {formValues, userId}) {
             Vue.axios.post(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`)
+                .then((res) => {
+                    console.log(res.data)
+                    const { data } = res.data;
+                    commit('pushBoard', data.board);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        createScrumBoard({commit}, {formValues, userId}) {
+            Vue.axios.post(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`,
+                {
+                    isScrum: true
+                },
+                {
+                    withCredentials: false
+                }
+            )
                 .then((res) => {
                     console.log(res.data)
                     const { data } = res.data;

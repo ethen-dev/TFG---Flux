@@ -22,6 +22,10 @@ const boardSchema = new mongoose.Schema({
     hasFlows: {
         type: Boolean,
         default: false
+    },
+    isScrum: {
+        type: Boolean,
+        default: false
     }
 });
 

@@ -39,9 +39,9 @@ export default {
 	},
 	watch: {
 		loggedUser: {
-			handler: function(newValue, oldValue) {
-				console.log(newValue, oldValue)
+			handler: function(newValue) {
 				this.$store.dispatch('boardStore/getBoards', newValue.userId);
+				this.$router.push(`/user/${newValue.userId}`)
 			},
 			deep: true
 		}

@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 
 exports.createBoard = async (req, res, next) => {
     const {userId, boardName} = req.params;
+    const {isScrum} = req.body;
 
     const user = await User.findById(userId);
 
@@ -10,10 +11,16 @@ exports.createBoard = async (req, res, next) => {
         throw new Exception('User not found, need valid user to create a board')
     }
 
-    const newBoard = new Board({
+    const config = {
         userId,
         name: boardName,
-    });
+    };
+
+    if (isScrum) {
+        config.isScrum = true;
+    }
+
+    const newBoard = new Board(config);
     
     newBoard.save()
         .then(async () => {
