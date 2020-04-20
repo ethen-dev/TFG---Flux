@@ -48,6 +48,7 @@ app.use(function (req, res, next) {
 app.use('/api/user/create', userRouter)
 app.use('/api/user/auth', userRouter)
 app.use('/api/user/token', userRouter)
+app.use('/api/user/logout', userRouter)
 app.use('/api/user/delete', userRouter)
 app.use('/api/board/create', boardRouter)
 app.use('/api/board/update', boardRouter)

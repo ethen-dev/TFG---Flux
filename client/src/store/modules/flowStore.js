@@ -1,13 +1,16 @@
 import Vue from 'vue';
 import {appConfig} from '../../../config/config';
 
+const getDefaultState = () => {
+    return {
+        flows: [],
+        flowActive: ''
+    }
+}
 
 export const flowStore = {
     namespaced: true,
-    state: {
-        flows: [],
-        flowActive: ''
-    },
+    state: getDefaultState(),
     getters: {},
     mutations: {
         setFlows(state, value) {
@@ -18,6 +21,9 @@ export const flowStore = {
         },
         changeFlowActive(state, value) {
             state.flowActive = value;
+        },
+        resetStore(state) {
+            Object.assign(state, getDefaultState());
         }
     },
     actions: {

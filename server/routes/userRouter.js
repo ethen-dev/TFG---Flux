@@ -14,5 +14,6 @@ router
 router
     .route('/:token')
     .get(userController.authToken)
+    .post(userController.logOut)
 
 module.exports = router;

@@ -2,11 +2,15 @@ import Vue from 'vue';
 import {appConfig} from '../../../config/config';
 
 
+const getDefaultState = () => {
+    return {
+        boards: []
+    }
+}
+
 export const boardStore = {
     namespaced: true,
-    state: {
-        boards: []
-    },
+    state: getDefaultState(),
     getters: {},
     mutations: {
         setBoards(state, value) {
@@ -14,6 +18,9 @@ export const boardStore = {
         },
         pushBoard(state, value) {
             state.boards.push(value);
+        },
+        resetStore(state) {
+            Object.assign(state, getDefaultState())
         }
     },
     actions: {
@@ -30,7 +37,6 @@ export const boardStore = {
                 });
         },
         createBoard({commit}, {formValues, userId}) {
-            console.log(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`)
             Vue.axios.post(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`)
                 .then((res) => {
                     console.log(res.data)

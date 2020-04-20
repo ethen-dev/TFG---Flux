@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import {appConfig} from '../../../config/config';
 
+const getDefaultState = () => {};
 
 export const taskStore = {
     namespaced: true,
-    state: {
-    },
+    state: getDefaultState(),
     getters: {
         getFlowTasks: (state) => (flowId) => {
             return state[flowId];
@@ -21,6 +21,9 @@ export const taskStore = {
         },
         spliceTask(state, {flowId, task}) {
             Vue.set(state, flowId, state[flowId].filter(_ => _ != task));
+        },
+        resetStore(state) {
+            Object.assign(state, getDefaultState())
         }
     },
     actions: {

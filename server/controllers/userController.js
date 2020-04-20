@@ -44,7 +44,7 @@ exports.authUser = async (req, res) => {
     try {
         const user = await User.findOne({email: req.params.email, password: req.params.password});
         const {_id, email} = user;
-        const token = jwt.sign({_id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
+        const token = jwt.sign({id: _id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
 
         if (!user) {
             throw new Exception('User not found')
@@ -162,6 +162,31 @@ exports.updateUser = async (req, res) => {
             .json({
                 status: 'fail',
                 message: err
+            });
+    }
+}
+
+exports.logOut = async (req, res) => {
+    try {
+        const token = jwt.sign({}, process.env.SECRET_KEY, { expiresIn: '0' });
+
+        res.cookie('tfg-jwt', token, {
+            expires: expirationDate,
+            httpOnly: true
+        });
+
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: `Successfully log out`,
+            });
+    } catch(err) {
+        res
+            .status(400)
+            .json({
+                status: 'fail',
+                message: `Something fail on log out`
             });
     }
 }
