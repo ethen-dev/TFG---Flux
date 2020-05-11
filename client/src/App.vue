@@ -41,7 +41,7 @@ export default {
 		loggedUser: {
 			handler: function(newValue) {
 				this.$store.dispatch('getBoards', newValue.userId);
-				this.$router.push(`/user/${newValue.userId}`)
+				// this.$router.push(`/user/${newValue.userId}`)
 			},
 			deep: true
 		}

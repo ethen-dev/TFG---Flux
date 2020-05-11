@@ -57,11 +57,25 @@ exports.createBoard = async (req, res, next) => {
 exports.updateBoard = async (req, res) => {
     try {
         const {boardId} = req.params;
+        const {userId} = req.body;
         console.log(req.body)
-        const board = await Board.findByIdAndUpdate(boardId, req.body, {
-            new: true,
-            runValidators: true
-        });
+
+        let board;
+
+        if (userId) {
+            board = await Board.findById(boardId);
+            board.members.push(userId);
+            board = await Board.findByIdAndUpdate(boardId, board, {
+                new: true,
+                runValidators: true
+            });
+        } else {
+            board = await Board.findByIdAndUpdate(boardId, req.body, {
+                new: true,
+                runValidators: true
+            });
+        }
+
 
         res
             .status(200)

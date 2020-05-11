@@ -27,6 +27,9 @@ export const boardStore = {
         },
         changeSprints(state, {boardId, sprints}) {
             Vue.set(state.boards.find(_ => _._id === boardId), 'sprints', sprints);
+        },
+        changeMembers(state, {boardId, members}) {
+            Vue.set(state.boards.find(_ => _._id === boardId), 'members', members);
         }
     },
     actions: {
@@ -90,10 +93,11 @@ export const boardStore = {
                     commit('changeSprints', {boardId, sprints: data.board.sprints});
                 })
         },
-        async addMember({commit}, {members, _id}) {
-            Vue.axios.patch(`${appConfig.apiUrl}/board/update/${_id}`,
+        async addMember({commit}, {userId, boardId}) {
+            Vue.axios.patch(`${appConfig.apiUrl}/board/update/${boardId}`,
                 {
-                    members
+                    userId,
+                    type: 'addMember'
                 },
                 {
                     withCredentials: false
@@ -102,7 +106,7 @@ export const boardStore = {
                 .then((res) => {
                     const { data } = res.data;
                     console.log(res.data);
-                    commit('changeMembers', {_id, members: data.board.members});
+                    commit('changeMembers', {boardId, members: data.board.members});
                 })
         }
     }

@@ -11,19 +11,26 @@ export default {
         ...mapGetters([
             'getBoard'
         ]),
-        board() {
-            return this.getBoard(this.$route.params.boardId);
+        boardId() {
+            return this.$route.params.boardId;
         },
         userId() {
             return this.$store.state.loggedUser.userId;
         }
     },
     mounted() {
-        const board = this.board;
-        board.members.push(this.userId);
-        this.$store.dispatch('addMember', board).then(() => {
-            this.$router.push(`user/${this.userId}/board/${board._id}`);
-        })
+        setTimeout(() => {  
+            const data = {
+                userId: this.userId,
+                boardId: this.boardId
+            }
+            this.$store.dispatch('addMember', data)
+            setTimeout(() => {
+                this.$router.push({
+                    path: `/user/${this.userId}/board/${this.boardId}`
+                });
+            }, 5000);
+        }, 1000);
     }
 }
 </script>
