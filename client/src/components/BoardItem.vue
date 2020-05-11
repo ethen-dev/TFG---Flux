@@ -30,11 +30,8 @@ export default {
 				return;
 			}
 			console.log(this.board)
-			if (!this.board.isScrum) {
-				this.$router.push(`/user/${this.userId}/board/${this.board._id}`);
-				return;
-			}
-			this.$router.push(`/user/${this.userId}/backlog/${this.board._id}`);
+
+			this.$router.push(`/user/${this.userId}/board/${this.board._id}`);
 		}
 	}
 }

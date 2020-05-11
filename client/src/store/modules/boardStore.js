@@ -9,9 +9,12 @@ const getDefaultState = () => {
 }
 
 export const boardStore = {
-    namespaced: true,
     state: getDefaultState(),
-    getters: {},
+    getters: {
+        getBoard: (state) => (id) => {
+            return state.boards.filter(_ => _._id === id)[0];
+        }
+    },
     mutations: {
         setBoards(state, value) {
             state.boards = value;
@@ -21,6 +24,9 @@ export const boardStore = {
         },
         resetStore(state) {
             Object.assign(state, getDefaultState())
+        },
+        changeSprints(state, {boardId, sprints}) {
+            Vue.set(state.boards.find(_ => _._id === boardId), 'sprints', sprints);
         }
     },
     actions: {
@@ -47,7 +53,8 @@ export const boardStore = {
                     console.log(err);
                 });
         },
-        createScrumBoard({commit}, {formValues, userId}) {
+        createScrumBoard({commit, dispatch}, {formValues, userId, flowValues}) {
+            console.log(formValues, userId, flowValues)
             Vue.axios.post(`${appConfig.apiUrl}/board/create/${userId}/${formValues.boardName}`,
                 {
                     isScrum: true
@@ -60,10 +67,43 @@ export const boardStore = {
                     console.log(res.data)
                     const { data } = res.data;
                     commit('pushBoard', data.board);
+                    for(let flow in flowValues) {
+                        dispatch('createFlow', {formValues: {flowName: flowValues[flow]}, boardId: data.board._id});
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        createSprint({commit}, {boardId, sprints}) {
+            Vue.axios.patch(`${appConfig.apiUrl}/board/update/${boardId}`,
+                {
+                    sprints
+                },
+                {
+                    withCredentials: false
+                }
+            )
+                .then((res) => {
+                    const { data } = res.data;
+                    console.log(res.data);
+                    commit('changeSprints', {boardId, sprints: data.board.sprints});
+                })
+        },
+        async addMember({commit}, {members, _id}) {
+            Vue.axios.patch(`${appConfig.apiUrl}/board/update/${_id}`,
+                {
+                    members
+                },
+                {
+                    withCredentials: false
+                }
+            )
+                .then((res) => {
+                    const { data } = res.data;
+                    console.log(res.data);
+                    commit('changeMembers', {_id, members: data.board.members});
+                })
         }
     }
 }

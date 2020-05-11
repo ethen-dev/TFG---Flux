@@ -3,6 +3,7 @@ const Flow = require('../models/flowModel');
 
 exports.createTask = async (req, res, next) => {
     const {flowId, taskName} = req.params;
+    const {description, priority} = req.body;
 
     const flow = await Flow.findById(flowId);
 
@@ -12,6 +13,8 @@ exports.createTask = async (req, res, next) => {
 
     const newTask = new Task({
         flowId,
+        description,
+        priority: parseInt(priority),
         name: taskName,
     });
 

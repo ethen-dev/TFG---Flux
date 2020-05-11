@@ -21,9 +21,9 @@ const routes = [
     component: () => import('../views/UserHomeView')
   },
   {
-    path: '/user/:userId/backlog/:boardId',
-    name: 'User Backlog Scrum View',
-    component: () => import('../views/BacklogView')
+    path: '/share/:boardId',
+    name: 'Share Page',
+    component: () => import('../views/ShareView')
   }
 ]
 

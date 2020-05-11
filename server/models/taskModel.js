@@ -14,6 +14,26 @@ const taskSchema = new mongoose.Schema({
             },
             message: () => `taskName is too small`
         }
+    },
+    description: {
+        type: String,
+        default: ''
+    },
+    comments: {
+        type: Array,
+        default: []
+    },
+    tags: {
+        type: Array,
+        default: []
+    },
+    priority: {
+        type: Number,
+        default: 0
+    },
+    sprintId: {
+        type: String,
+        default: ''
     }
 });
 

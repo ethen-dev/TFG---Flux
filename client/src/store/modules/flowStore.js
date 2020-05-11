@@ -9,7 +9,6 @@ const getDefaultState = () => {
 }
 
 export const flowStore = {
-    namespaced: true,
     state: getDefaultState(),
     getters: {},
     mutations: {

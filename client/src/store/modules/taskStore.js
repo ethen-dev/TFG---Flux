@@ -4,7 +4,6 @@ import {appConfig} from '../../../config/config';
 const getDefaultState = () => {};
 
 export const taskStore = {
-    namespaced: true,
     state: getDefaultState(),
     getters: {
         getFlowTasks: (state) => (flowId) => {
@@ -29,7 +28,15 @@ export const taskStore = {
     actions: {
         createTask({commit}, {formValues, flowId}) {
             console.log(`${appConfig.apiUrl}/task/create/${flowId}/${formValues.taskName}`)
-            Vue.axios.post(`${appConfig.apiUrl}/task/create/${flowId}/${formValues.taskName}`)
+            Vue.axios.post(`${appConfig.apiUrl}/task/create/${flowId}/${formValues.taskName}`,
+                {
+                    description: formValues.taskDescription,
+                    priority: formValues.priority
+                },
+                {
+                    withCredentials: false
+                }
+            )
                 .then((res) => {
                     console.log(res.data)
                     const { data } = res.data;

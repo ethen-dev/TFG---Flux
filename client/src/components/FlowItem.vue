@@ -47,10 +47,10 @@ export default {
       }),
       tasks: {
           get() {
-              return this.$store.getters['taskStore/getFlowTasks'](this.flow._id);
+              return this.$store.getters['getFlowTasks'](this.flow._id);
           },
           set(value) {
-              this.$store.dispatch('taskStore/updateTasks', {flowId: this.flow._id, value});
+              this.$store.dispatch('updateTasks', {flowId: this.flow._id, value});
           }
       }
   },
@@ -65,11 +65,11 @@ export default {
         }
     },
     createTask() {
-        this.$store.dispatch('flowStore/updateFlowActive', this.flow._id);
+        this.$store.dispatch('updateFlowActive', this.flow._id);
         this.$store.dispatch('openModal', 'NewTask');
     },
     getTasks() {
-        this.$store.dispatch('taskStore/getTasks', this.flow._id);
+        this.$store.dispatch('getTasks', this.flow._id);
     }
   }
 }

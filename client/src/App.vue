@@ -40,7 +40,7 @@ export default {
 	watch: {
 		loggedUser: {
 			handler: function(newValue) {
-				this.$store.dispatch('boardStore/getBoards', newValue.userId);
+				this.$store.dispatch('getBoards', newValue.userId);
 				this.$router.push(`/user/${newValue.userId}`)
 			},
 			deep: true

@@ -11,8 +11,12 @@ exports.createBoard = async (req, res, next) => {
         throw new Exception('User not found, need valid user to create a board')
     }
 
+    const members = [];
+    members.push(userId);
+
     const config = {
         userId,
+        members,
         name: boardName,
     };
 
@@ -88,7 +92,12 @@ exports.getAllBoards = async (req, res) => {
             throw new Exception('No Boards found');
         }
 
-        const boards = await Board.find({userId});
+        const boards = await Board.find({
+            members: {
+                $regex: userId,
+                $options: 'i'
+            }
+        });
 
         res 
             .status(200)

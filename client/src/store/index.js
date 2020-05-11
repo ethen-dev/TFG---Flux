@@ -32,9 +32,6 @@ export default new Vuex.Store({
   actions: {
 	resetStores({commit}) {
 		commit('resetStore');
-		commit('boardStore/resetStore');
-		commit('flowStore/resetStore');
-		commit('taskStore/resetStore');
 	},
 	signup({commit}, {email, password}) {
 		axios.defaults.withCredentials = true;

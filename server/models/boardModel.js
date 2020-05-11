@@ -26,6 +26,14 @@ const boardSchema = new mongoose.Schema({
     isScrum: {
         type: Boolean,
         default: false
+    },
+    sprints: {
+        type: Array,
+        default: []
+    },
+    members: {
+        type: Array,
+        default: []
     }
 });
 

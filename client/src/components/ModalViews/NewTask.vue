@@ -6,7 +6,21 @@
         <FormulateInput 
             name="taskName"
             type="text" 
-            validation="required|min:5"
+            label="Title"
+            validation="required|min:3"
+        />
+        <FormulateInput 
+            name="taskDescription"
+            type="text" 
+            label="Description"
+            validation="required|min:3"
+        />
+        <FormulateInput 
+            name="priority"
+            type="select" 
+            value="0"
+            :options="{0: 'low', 1: 'min', 2: 'high'}"
+            label="priority"
         />
         <FormulateInput
             type="submit"
@@ -34,7 +48,7 @@ export default {
     },
     methods: {
         createTask() {
-            this.$store.dispatch('taskStore/createTask', {formValues: this.formValues, flowId: this.flowActive});
+            this.$store.dispatch('createTask', {formValues: this.formValues, flowId: this.flowActive});
         }
     }
 }
