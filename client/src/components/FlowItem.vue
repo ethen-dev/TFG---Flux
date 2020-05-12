@@ -77,7 +77,9 @@ export default {
     },
     editTask(id) {
         this.$store.dispatch('setActiveTask', id);
-        this.$store.dispatch('openModal', 'EditTask');
+        setTimeout(() => {
+            this.$store.dispatch('openModal', 'EditTask');
+        }, 0);
     },
     setActiveFlow() {
         this.$store.dispatch('updateFlowActive', this.flow._id);
