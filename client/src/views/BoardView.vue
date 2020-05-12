@@ -1,5 +1,5 @@
 <template>
-  <div class="view board">
+  <div class="view board" v-if="board">
     <h1>This is a Board page</h1>
     <div class="top-nav">
       <div 
@@ -9,6 +9,13 @@
       >
         Add Sprint
       </div>
+      <FormulateInput
+          v-model="activeSprint"
+          type="select"
+          :options="sprints"
+          @input="selectActiveSprint"
+          label="Sprint Active"
+      />
       <div 
         @click="generateShareLink()"
         v-if="board.isScrum" 
@@ -43,7 +50,8 @@ export default {
   },
   data() {
     return {
-      boardUrl: ''
+      boardUrl: '',
+      activeSprint: '0'
     }
   },
   computed: {
@@ -58,6 +66,15 @@ export default {
     },
     board() {
       return this.getBoard(this.$route.params.boardId);
+    },
+    sprints() {
+      const formattedSprints = {'0': 'Backlog'};
+      const sprints = this.board.sprints;
+      for (let sprint in sprints) {
+        formattedSprints[sprints[sprint]._id] = sprints[sprint].name;
+      }
+      
+      return formattedSprints;
     }
   },
   beforeCreate() {
@@ -71,6 +88,11 @@ export default {
           name: `sprint-${sprints.length}`,
           _id: md5(`sprint-${sprints.length}`)
         })
+      } else {
+        sprints.push({
+          name: `sprint-${sprints.length}`,
+          _id: md5(`sprint-${sprints.length}`)
+        })
       }
       this.$store.dispatch('createSprint', {boardId: this.board._id, sprints})
     },
@@ -78,6 +100,10 @@ export default {
       const id = this.board._id;
       const baseUrl = document.location.href.split('#')[0];
       this.boardUrl = `${baseUrl}#/share/${id}`;
+    },
+    selectActiveSprint() {
+      console.log('dddddddd')
+      this.$store.dispatch('updateActiveSprint', this.activeSprint)
     }
   }
 }

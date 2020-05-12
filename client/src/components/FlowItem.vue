@@ -6,7 +6,7 @@
     <h1>
         {{flow.name}}
     </h1>
-    <div class="task-container">
+    <div class="task-container" @click="setActiveFlow">
         <div 
             class="task"
             @click="createTask"
@@ -18,6 +18,7 @@
                 v-for="task in tasks"
                 :key="task._id"
                 :task="task"
+                @click.native="editTask(task._id)"
             />
         </draggable>
     </div>
@@ -32,27 +33,31 @@ import { mapState } from 'vuex';
 export default {
   name: 'BoardItem',
   components: {
-      draggable,
-      TaskItem
+    draggable,
+    TaskItem
   },
   props: {
     flow: {
-      type: Object,
-      required: true
+        type: Object,
+        required: true
     }
   },
   computed: {
-      ...mapState({
-          taskStore: state => state.taskStore
-      }),
-      tasks: {
-          get() {
-              return this.$store.getters['getFlowTasks'](this.flow._id);
-          },
-          set(value) {
-              this.$store.dispatch('updateTasks', {flowId: this.flow._id, value});
-          }
-      }
+        ...mapState({
+            taskStore: state => state.taskStore,
+            boardStore: state => state.boardStore
+        }),
+        tasks: {
+            get() {
+                return this.$store.getters['getFlowTasks'](this.flow._id, this.activeSprint || '0');
+            },
+            set(value) {
+                this.$store.dispatch('updateTasks', {flowId: this.flow._id, value});
+            }
+        },
+        activeSprint() {
+            return this.boardStore.activeSprint;
+        }
   },
   mounted() {
       this.getTasks();
@@ -65,11 +70,17 @@ export default {
         }
     },
     createTask() {
-        this.$store.dispatch('updateFlowActive', this.flow._id);
         this.$store.dispatch('openModal', 'NewTask');
     },
     getTasks() {
         this.$store.dispatch('getTasks', this.flow._id);
+    },
+    editTask(id) {
+        this.$store.dispatch('setActiveTask', id);
+        this.$store.dispatch('openModal', 'EditTask');
+    },
+    setActiveFlow() {
+        this.$store.dispatch('updateFlowActive', this.flow._id);
     }
   }
 }

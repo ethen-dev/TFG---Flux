@@ -4,7 +4,8 @@ import {appConfig} from '../../../config/config';
 
 const getDefaultState = () => {
     return {
-        boards: []
+        boards: [],
+        activeSprint: '0'
     }
 }
 
@@ -30,6 +31,9 @@ export const boardStore = {
         },
         changeMembers(state, {boardId, members}) {
             Vue.set(state.boards.find(_ => _._id === boardId), 'members', members);
+        },
+        changeActiveSprint(state, value) {
+            state.activeSprint = value;
         }
     },
     actions: {
@@ -108,6 +112,9 @@ export const boardStore = {
                     console.log(res.data);
                     commit('changeMembers', {boardId, members: data.board.members});
                 })
+        },
+        updateActiveSprint({commit}, sprint) {
+            commit('changeActiveSprint', sprint);
         }
     }
 }

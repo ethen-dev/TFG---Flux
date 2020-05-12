@@ -16,14 +16,16 @@
 import NewBoard from '../ModalViews/NewBoard';
 import NewFlow from '../ModalViews/NewFlow';
 import NewTask from '../ModalViews/NewTask';
-import ScrumFlow from '../ModalViews/ScrumFlow'
+import ScrumFlow from '../ModalViews/ScrumFlow';
+import EditTask from '../ModalViews/EditTask';
 
 export default {
     components: {
         NewBoard,
         NewFlow,
         NewTask,
-        ScrumFlow
+        ScrumFlow,
+        EditTask
     },
     computed: {
         storedModalView() {

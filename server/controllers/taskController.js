@@ -3,7 +3,7 @@ const Flow = require('../models/flowModel');
 
 exports.createTask = async (req, res, next) => {
     const {flowId, taskName} = req.params;
-    const {description, priority} = req.body;
+    const {description, priority, sprint} = req.body;
 
     const flow = await Flow.findById(flowId);
 
@@ -16,6 +16,7 @@ exports.createTask = async (req, res, next) => {
         description,
         priority: parseInt(priority),
         name: taskName,
+        sprintId: sprint
     });
 
     newTask.save()
@@ -49,11 +50,22 @@ exports.createTask = async (req, res, next) => {
 exports.updateTask = async (req, res) => {
     try {
         const {taskId} = req.params;
-        
-        const task = await Task.findByIdAndUpdate(taskId, req.body, {
-            new: true,
-            runValidators: true
-        });
+        const {comment} = req.body;
+        let task;
+
+        if (comment) {
+            task = await Task.findById(taskId);
+            task.comments.push(comment);
+            task = await Task.findByIdAndUpdate(taskId, task, {
+                new: true,
+                runValidators: true
+            });
+        } else {
+            task = await Task.findByIdAndUpdate(taskId, req.body, {
+                new: true,
+                runValidators: true
+            });
+        }
 
         res
             .status(200)

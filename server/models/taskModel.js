@@ -33,7 +33,7 @@ const taskSchema = new mongoose.Schema({
     },
     sprintId: {
         type: String,
-        default: ''
+        default: '0'
     }
 });
 

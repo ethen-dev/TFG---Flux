@@ -23,6 +23,13 @@
             label="priority"
         />
         <FormulateInput
+            name="sprint"
+            type="select"
+            value="0"
+            :options="sprints"
+            label="Assign to Sprint"
+        />
+        <FormulateInput
             type="submit"
             label="Create Task"
         />
@@ -30,7 +37,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 
 export default {
     data() {
@@ -40,10 +47,31 @@ export default {
     },
     computed: {
         ...mapState({
-            flowStore: state => state.flowStore
+            flowStore: state => state.flowStore,
+            boardStore: state => state.boardStore
         }),
+        ...mapGetters([
+            'getBoard'
+        ]),
         flowActive() {
             return this.flowStore.flowActive;
+        },
+        boardSprints() {
+            return this.getBoard(this.$route.params.boardId).sprints;
+        },
+        sprints() {
+            const formattedSprints = {
+                0: 'Backlog'
+            };
+            const sprints = this.boardSprints;
+            for (let sprint in sprints) {
+                formattedSprints[sprints[sprint]._id] = sprints[sprint].name;
+            }
+            
+            return formattedSprints;
+        },
+        activeSprint() {
+            return this.boardStore.activeSprint;
         }
     },
     methods: {
