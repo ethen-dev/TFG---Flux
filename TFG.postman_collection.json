@@ -94,6 +94,17 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get User Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}

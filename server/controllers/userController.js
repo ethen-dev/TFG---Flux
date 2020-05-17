@@ -3,10 +3,11 @@ const jwt = require('jsonwebtoken');
 const expirationDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
 
 exports.createUser = (req, res) => {
-    const {email, password} = req.params;
+    const {email, password, userName} = req.params;
     const newUser = new User({
         email,
         password,
+        userName
     });
 
     const token = jwt.sign({id: newUser._id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
@@ -175,6 +176,8 @@ exports.logOut = async (req, res) => {
             httpOnly: true
         });
 
+        console.log('logout')
+
         res
             .status(200)
             .json({
@@ -189,4 +192,30 @@ exports.logOut = async (req, res) => {
                 message: `Something fail on log out`
             });
     }
+}
+
+exports.getUsername = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        const userName = user._doc.userName;
+
+        res
+            .status(200)
+            .json({
+                status: 'success',
+                message: `Successfully get user name`,
+                data: {
+                    userName
+                }
+            });
+    } catch (err) {
+        res
+            .status(400)
+            .json({
+                status: 'fail',
+                message: `Something fail getting user name`
+            });
+    }
+
+
 }

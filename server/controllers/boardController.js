@@ -57,7 +57,7 @@ exports.createBoard = async (req, res, next) => {
 exports.updateBoard = async (req, res) => {
     try {
         const {boardId} = req.params;
-        const {userId} = req.body;
+        const {userId, category} = req.body;
         console.log(req.body)
 
         let board;
@@ -69,7 +69,18 @@ exports.updateBoard = async (req, res) => {
                 new: true,
                 runValidators: true
             });
-        } else {
+        } 
+
+        if (category) {
+            board = await Board.findById(boardId);
+            board.tags.push(category);
+            board = await Board.findByIdAndUpdate(boardId, board, {
+                new: true,
+                runValidators: true
+            });
+        } 
+        
+        if (!userId && !category) {
             board = await Board.findByIdAndUpdate(boardId, req.body, {
                 new: true,
                 runValidators: true

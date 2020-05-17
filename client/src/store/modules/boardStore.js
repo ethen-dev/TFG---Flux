@@ -5,7 +5,9 @@ import {appConfig} from '../../../config/config';
 const getDefaultState = () => {
     return {
         boards: [],
-        activeSprint: '0'
+        activeSprint: '0',
+        activeMember: '',
+        activeCategory: ''
     }
 }
 
@@ -13,7 +15,17 @@ export const boardStore = {
     state: getDefaultState(),
     getters: {
         getBoard: (state) => (id) => {
+            if (!state.boards.filter(_ => _._id === id)[0]) { return; }
             return state.boards.filter(_ => _._id === id)[0];
+        },
+        getCategories: state => id => {
+            if (!state.boards.filter(_ => _._id === id)[0]) { return; }
+            const categories =  state.boards.filter(_ => _._id === id)[0].tags;
+            const obj = {};
+            categories.forEach(category => {
+                obj[category] = category;
+            });
+            return obj;
         }
     },
     mutations: {
@@ -34,6 +46,15 @@ export const boardStore = {
         },
         changeActiveSprint(state, value) {
             state.activeSprint = value;
+        },
+        changeActiveMember(state, value) {
+            state.activeMember = value;
+        },
+        changeActiveCategory(state, value) {
+            state.activeCategory = value;
+        },
+        changeCategories(state, {boardId, categories}) {
+            Vue.set(state.boards.find(_ => _._id === boardId), 'tags', categories);
         }
     },
     actions: {
@@ -115,6 +136,27 @@ export const boardStore = {
         },
         updateActiveSprint({commit}, sprint) {
             commit('changeActiveSprint', sprint);
+        },
+        updateActiveMember({ commit }, member) {
+            commit('changeActiveMember', member);
+        },
+        updateActiveCategory({ commit }, category) {
+            commit('changeActiveCategory', category);
+        },
+        addCategory({commit}, {category, boardId}) {
+            Vue.axios.patch(`${appConfig.apiUrl}/board/update/${boardId}`,
+                {
+                    category
+                },
+                {
+                    withCredentials: false
+                }
+            )
+                .then((res) => {
+                    const { data } = res.data;
+                    console.log(res.data);
+                    commit('changeCategories', { boardId, categories: data.board.tags });
+                })
         }
     }
 }

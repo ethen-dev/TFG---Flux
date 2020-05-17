@@ -49,7 +49,7 @@ export default {
         }),
         tasks: {
             get() {
-                return this.$store.getters['getFlowTasks'](this.flow._id, this.activeSprint || '0');
+                return this.$store.getters['getFlowTasks'](this.flow._id, this.activeSprint || '0', this.activeMember || '', this.activeCategory || '');
             },
             set(value) {
                 this.$store.dispatch('updateTasks', {flowId: this.flow._id, value});
@@ -57,6 +57,12 @@ export default {
         },
         activeSprint() {
             return this.boardStore.activeSprint;
+        },
+        activeMember() {
+            return this.boardStore.activeMember;
+        },
+        activeCategory() {
+            return this.boardStore.activeCategory;
         }
   },
   mounted() {

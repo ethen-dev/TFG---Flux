@@ -30,6 +30,22 @@
             label="Assign to Sprint"
         />
         <FormulateInput
+            v-if="hasBoardCategories"
+            name="categories"
+            :options="boardCategories"
+            type="checkbox"
+            label="Select categories to this task:"
+        />
+        <p v-else>
+            Para poder asignar una categoria a la tarea, debes crearlas primero desde el tablero.
+        </p>
+        <FormulateInput
+            name="assignedTo"
+            :options="boardMembers"
+            type="select"
+            label="Assign this task to:"
+        />
+        <FormulateInput
             type="submit"
             label="Create Task"
         />
@@ -38,11 +54,14 @@
 
 <script>
 import {mapState, mapGetters} from 'vuex';
+import {appConfig} from '../../../config/config';
+import Vue from 'vue';
 
 export default {
     data() {
         return {
-            formValues: {}
+            formValues: {},
+            members: {}
         }
     },
     computed: {
@@ -51,7 +70,8 @@ export default {
             boardStore: state => state.boardStore
         }),
         ...mapGetters([
-            'getBoard'
+            'getBoard',
+            'getCategories'
         ]),
         flowActive() {
             return this.flowStore.flowActive;
@@ -72,11 +92,34 @@ export default {
         },
         activeSprint() {
             return this.boardStore.activeSprint;
+        },
+        hasBoardCategories() {
+            return this.getBoard(this.$route.params.boardId).tags.length > 0;
+        },
+        boardCategories() {
+            return this.getCategories(this.$route.params.boardId);
+        },
+        boardMembers() {
+            return this.members;
         }
+    },
+    beforeMount() {
+        this.loadBoardMembers();
     },
     methods: {
         createTask() {
             this.$store.dispatch('createTask', {formValues: this.formValues, flowId: this.flowActive});
+        },
+        loadBoardMembers() {
+            const members = this.getBoard(this.$route.params.boardId).members;
+            const obj = {};
+            members.forEach(async (member) => {
+                Vue.set(this.members, member,  await Vue.axios.get(`${appConfig.apiUrl}/user/get/username/${member}`)
+                    .then(res => {
+                        return res.data.data.userName;
+                    }));
+            })
+            return obj;
         }
     }
 }

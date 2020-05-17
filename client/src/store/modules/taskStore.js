@@ -10,9 +10,12 @@ const getDefaultState = () => {
 export const taskStore = {
     state: getDefaultState(),
     getters: {
-        getFlowTasks: (state) => (flowId, sprintId) => {
+        getFlowTasks: (state) => (flowId, sprintId, memberId, category) => {
             if (!state[flowId]) {return [];}
-            return state[flowId].filter(_ => _.sprintId === sprintId);
+            const sprint = (_) => (_.sprintId === sprintId);
+            const member = memberId ? (_) => (_.assignedTo === memberId) : (_) => (_);
+            const tag = category ? (_) => (_.tags.includes(category)) : (_) => (_);
+            return state[flowId].filter(sprint).filter(member).filter(tag);
         },
         getActiveTask: (state) => (flowId, taskId) => {
             return state[flowId].filter(_ => _._id === taskId)[0];
@@ -59,7 +62,9 @@ export const taskStore = {
                 {
                     description: formValues.taskDescription,
                     priority: formValues.priority,
-                    sprint: formValues.sprint || ''
+                    sprint: formValues.sprint || '',
+                    tags: formValues.categories,
+                    assignedTo: formValues.assignedTo
                 },
                 {
                     withCredentials: false
@@ -130,13 +135,15 @@ export const taskStore = {
                     console.log(err);
                 });
         },
-        updateEditedTask({commit, state}, {priority, sprint, taskDescription, taskName, flowId}) {
+        updateEditedTask({ commit, state }, { priority, categories, sprint, taskDescription, taskName, flowId, assignedTo}) {
             Vue.axios.patch(`${appConfig.apiUrl}/task/update/${state.activeTask}`,
                 {
                     priority: parseInt(priority),
                     sprintId: sprint,
                     description: taskDescription,
-                    name: taskName
+                    name: taskName,
+                    tags: categories,
+                    assignedTo
                 },
                 {
                     withCredentials: false

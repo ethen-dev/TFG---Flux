@@ -2,6 +2,30 @@
   <div class="view board" v-if="board">
     <h1>This is a Board page</h1>
     <div class="top-nav">
+      <FormulateForm
+        v-model="categories"
+        @submit="addCategory"
+      >
+        <FormulateInput
+          name="category"
+          type="text"
+          label="write a category and press enter"
+      />
+      </FormulateForm>
+      <FormulateInput
+        v-model="activeCategory"
+        type="select"
+        @input="selectActiveCategory"
+        :options="boardCategories"
+        label="Filter by Category"
+      />
+      <FormulateInput
+        v-model="activeMember"
+        type="select"
+        @input="selectActiveMember"
+        :options="boardMembers"
+        label="Fiter by User"
+      />
       <div 
         @click="addSprint()"
         v-if="board.isScrum" 
@@ -11,6 +35,7 @@
       </div>
       <FormulateInput
           v-model="activeSprint"
+          v-if="board.isScrum" 
           type="select"
           :options="sprints"
           @input="selectActiveSprint"
@@ -18,7 +43,6 @@
       />
       <div 
         @click="generateShareLink()"
-        v-if="board.isScrum" 
         class="button"
       >
         Share Board
@@ -43,6 +67,8 @@
 import FlowItem from '../components/FlowItem';
 import md5 from 'blueimp-md5';
 import { mapState, mapGetters } from 'vuex';
+import {appConfig} from '../../config/config';
+import Vue from 'vue';
 
 export default {
   components: {
@@ -51,7 +77,11 @@ export default {
   data() {
     return {
       boardUrl: '',
-      activeSprint: '0'
+      activeSprint: '0',
+      activeMember: '',
+      activeCategory: '',
+      categories: {},
+      members: {}
     }
   },
   computed: {
@@ -59,7 +89,8 @@ export default {
       flowStore: state => state.flowStore
     }),
     ...mapGetters([
-      'getBoard'
+      'getBoard',
+      'getCategories'
     ]),
     flows() {
       return this.flowStore.flows;
@@ -75,10 +106,21 @@ export default {
       }
       
       return formattedSprints;
-    }
+    },
+    boardCategories() {
+      return this.getCategories(this.$route.params.boardId);
+    },
+    boardMembers() {
+      return this.members;
+    },
   },
   beforeCreate() {
     this.$store.dispatch('getFlows', this.$route.params.boardId);
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loadBoardMembers();
+    }, 500);
   },
   methods: {
     addSprint() {
@@ -102,8 +144,28 @@ export default {
       this.boardUrl = `${baseUrl}#/share/${id}`;
     },
     selectActiveSprint() {
-      console.log('dddddddd')
       this.$store.dispatch('updateActiveSprint', this.activeSprint)
+    },
+    selectActiveCategory() {
+      this.$store.dispatch('updateActiveCategory', this.activeCategory)
+    },
+    selectActiveMember() {
+      this.$store.dispatch('updateActiveMember', this.activeMember)
+    },
+    addCategory() {
+      this.$store.dispatch('addCategory', {category: this.categories.category, boardId: this.$route.params.boardId});
+      this.categories.category = ''
+    },
+    loadBoardMembers() {
+      const members = this.board.members;
+      const obj = {};
+      members.forEach(async (member) => {
+        Vue.set(this.members, member,  await Vue.axios.get(`${appConfig.apiUrl}/user/get/username/${member}`)
+          .then(res => {
+            return res.data.data.userName;
+          }));
+      })
+      return obj;
     }
   }
 }

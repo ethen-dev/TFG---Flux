@@ -33,6 +33,24 @@
                 label="Assign to Sprint"
             />
             <FormulateInput
+                v-if="hasBoardCategories"
+                name="categories"
+                :options="boardCategories"
+                :value="activeTask.tags"
+                type="checkbox"
+                label="This is a label for all the options"
+            />
+            <p v-else>
+                Para poder asignar una categoria a la tarea, debes crearlas primero desde el tablero.
+            </p>
+            <FormulateInput
+                name="assignedTo"
+                :options="boardMembers"
+                :value="activeTask.assignedTo"
+                type="select"
+                label="Assign this task to:"
+            />
+            <FormulateInput
                 type="submit"
                 label="Save Task Changes"
             />
@@ -67,12 +85,15 @@
 
 <script>
 import {mapState, mapGetters} from 'vuex';
+import {appConfig} from '../../../config/config';
+import Vue from 'vue';
 
 export default {
     data() {
         return {
             formValues: {},
-            comment: ''
+            comment: '',
+            members: {}
         }
     },
     computed: {
@@ -107,7 +128,24 @@ export default {
             }
             
             return formattedSprints;
+        },
+        hasBoardCategories() {
+            return this.getBoard(this.$route.params.boardId).tags.length > 0;
+        },
+        boardCategories() {
+            const categories = this.getBoard(this.$route.params.boardId).tags;
+            const obj = {};
+            categories.forEach(category => {
+                obj[category] = category;
+            })
+            return obj;
+        },
+        boardMembers() {
+            return this.members;
         }
+    },
+    beforeMount() {
+        this.loadBoardMembers();
     },
     methods: {
         saveTaskChanges() {
@@ -123,6 +161,17 @@ export default {
                 flowId: this.flowActive 
             }
             this.$store.dispatch('sendComment', comment)
+        },
+        loadBoardMembers() {
+            const members = this.getBoard(this.$route.params.boardId).members;
+            const obj = {};
+            members.forEach(async (member) => {
+                Vue.set(this.members, member,  await Vue.axios.get(`${appConfig.apiUrl}/user/get/username/${member}`)
+                    .then(res => {
+                        return res.data.data.userName;
+                    }));
+            })
+            return obj;
         }
     }
 }
