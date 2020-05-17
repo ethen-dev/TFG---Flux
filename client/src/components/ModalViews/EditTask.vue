@@ -93,7 +93,7 @@ export default {
         return {
             formValues: {},
             comment: '',
-            members: {}
+            members: {'': '---'}
         }
     },
     computed: {
@@ -104,7 +104,8 @@ export default {
         }),
         ...mapGetters([
             'getActiveTask',
-            'getBoard'
+            'getBoard',
+            'getCategories'
         ]),
         flowActive() {
             return this.flowStore.flowActive;
@@ -133,12 +134,7 @@ export default {
             return this.getBoard(this.$route.params.boardId).tags.length > 0;
         },
         boardCategories() {
-            const categories = this.getBoard(this.$route.params.boardId).tags;
-            const obj = {};
-            categories.forEach(category => {
-                obj[category] = category;
-            })
-            return obj;
+            return this.getCategories(this.$route.params.boardId);
         },
         boardMembers() {
             return this.members;

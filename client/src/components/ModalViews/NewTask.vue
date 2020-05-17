@@ -61,7 +61,7 @@ export default {
     data() {
         return {
             formValues: {},
-            members: {}
+            members: {'': '---'}
         }
     },
     computed: {

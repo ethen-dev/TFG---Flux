@@ -81,7 +81,7 @@ export default {
       activeMember: '',
       activeCategory: '',
       categories: {},
-      members: {}
+      members: {'': 'All'}
     }
   },
   computed: {
@@ -108,7 +108,7 @@ export default {
       return formattedSprints;
     },
     boardCategories() {
-      return this.getCategories(this.$route.params.boardId);
+      return {'': 'All', ...this.getCategories(this.$route.params.boardId)};
     },
     boardMembers() {
       return this.members;
