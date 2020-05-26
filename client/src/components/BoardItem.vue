@@ -7,9 +7,9 @@
 		<p :class="{'type-box': board.name === '+'}">
 			{{board.name}}
 		</p>
-		<dic class="type-box" v-if="board._id">
+		<div class="type-box" v-if="board._id">
 			{{boardType}}
-		</dic>
+		</div>
 	</div>
 </template>
 

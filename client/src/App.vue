@@ -46,8 +46,13 @@ export default {
 			deep: true
 		}
 	},
-	mounted() {
-		this.$store.dispatch('autoLogin');
+	async mounted() {
+		this.$store.dispatch('autoLogin').then((res) => {
+			if (this.$route.path !== '/') {return;}
+			this.$router.push({
+				path: `/user/${res.data.data.id}`
+			})
+		})
 	},
 	
 }

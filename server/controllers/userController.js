@@ -85,11 +85,10 @@ exports.authToken = async (req, res) => {
     try {
         const {token} = req.params;
         var decoded = jwt.verify(req.cookies[token], process.env.SECRET_KEY);
-        console.log(decoded)
-        console.log('------------')
         
-        const user = await User.findById(id);
-        const { id, email, userName} = user;
+        const user = await User.findById(decoded.id);
+
+        const { _id, email, userName} = user._doc;
         
         if (!user) {
             throw new Exception('User not found')
@@ -103,7 +102,8 @@ exports.authToken = async (req, res) => {
                 auth: true,
                 data: {
                     email,
-                    id
+                    id: _id,
+                    userName
                 }
             });
     } catch (err) {
@@ -111,7 +111,7 @@ exports.authToken = async (req, res) => {
             .status(400)
             .json({
                 status: 'fail',
-                message: `Email ${email} or password incorrect`,
+                message: `Email or password incorrect`,
                 auth: false
             });
     }

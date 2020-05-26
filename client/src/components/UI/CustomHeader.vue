@@ -27,7 +27,7 @@
       </div>   -->
 		<div class="navigation">
 			<img src="/assets/logo.svg" alt="flux logo">
-			<div class="filter-container" v-if="$route.name === 'User Board View'">
+			<div class="filter-container" v-if="$route.params.boardId">
 				<FormulateForm
 					v-model="categories"
 					@submit="addCategory"
@@ -138,10 +138,21 @@ export default {
 			return formattedSprints;
 		},
 	},
+	watch: {
+		$route(oldval, newval) {
+			if (newval.params.boardId || oldval.params.boardId) {
+				setTimeout(() => {
+					this.loadBoardMembers();
+				}, 500);
+			}
+		}
+	},
 	mounted() {
-		setTimeout(() => {
-			this.loadBoardMembers();
-		}, 500);
+		if (this.$route.params.boardId) {
+			setTimeout(() => {
+				this.loadBoardMembers();
+			}, 500);
+		}
 	},
     methods: {
 		signUp() {
@@ -188,6 +199,7 @@ export default {
 			this.categories.category = ''
 		},
 		loadBoardMembers() {
+			if (!this.board) {return;}
 			const members = this.board.members;
 			const obj = {};
 			members.forEach(async (member) => {

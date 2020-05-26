@@ -1,6 +1,5 @@
 <template>
   <div class="view board" v-if="board">
-    <h1>This is a Board page</h1>
     <div class="flow-container">
       <flow-item
         v-for="flow in flows"
