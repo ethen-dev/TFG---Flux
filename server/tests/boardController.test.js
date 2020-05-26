@@ -1,40 +1,42 @@
 const request = require('supertest');
 const requestUrl = 'http://localhost:8080';
+let testUser = 'testboard@test.com';
+const testPassword = '564s635d41f35sd4';
 const boardName = 'boardTest';
-let userId, boardId;
+let token, boardId, userId;
 
-describe('Create Board', () => {
-    it('Create Board return status 200', async () => {
+
+describe('Board Interactions', () => {
+    beforeEach(async () => {
         const user = await request(requestUrl)
-            .post('/api/user/create/test@test.com/testPass');
-        
-        expect(user.statusCode).toEqual(200);
-
+            .post(`/api/user/create/${testUser}/${testPassword}/testUser`);
+        token = user.body.data.token;
         userId = user.body.data.id;
-        
-        const req = await request(requestUrl)
+        testUser = 'testboard@test.com';
+
+        const board = await request(requestUrl)
             .post(`/api/board/create/${userId}/${boardName}`);
-        
-        expect(req.body.data).toHaveProperty('board');
 
-        boardId = req.body.data.board._id;
-
-        expect(req.statusCode).toEqual(200);
+        boardId = board.body.data.board._id;
     })
-})
 
-describe('Get user Boards', () => {
-    it('GetUserBoards return status 200', async () => {
+    afterEach(async () => {
+        const board = await request(requestUrl)
+            .delete(`/api/board/delete/${boardId}`);
+
+        const user = await request(requestUrl)
+            .delete(`/api/user/delete/${testUser}/${testPassword}`);
+    })
+
+    test('GetUserBoards return status 200', async () => {
         const req = await request(requestUrl)
             .get(`/api/board/getAll/${userId}`);
 
         expect(req.statusCode).toEqual(200);
         expect(req.body.data).toHaveProperty('boards');
     })
-})
 
-describe('Update Board', () => {
-    it('Update Board return status 200', async () => {
+    test('Update Board return status 200', async () => {
         const req = await request(requestUrl)
             .patch(`/api/board/update/${boardId}`)
             .send({
@@ -42,20 +44,6 @@ describe('Update Board', () => {
             });
 
         expect(req.statusCode).toEqual(200);
-        expect(req.body.data.board.name).toEqual('BoardUpdate')
+        expect(req.body.data.board.name).toEqual('BoardUpdate');
     })
-})
-
-describe('Delete Board', () => {
-    it('Delete Board return status 204', async () => {
-        const req = await request(requestUrl)
-            .delete(`/api/board/delete/${boardId}`);
-
-        expect(req.statusCode).toEqual(204);
-
-        const user = await request(requestUrl)
-            .delete('/api/user/delete/test@test.com/testPass');
-
-        expect(user.statusCode).toEqual(204);
-    })
-})
+});

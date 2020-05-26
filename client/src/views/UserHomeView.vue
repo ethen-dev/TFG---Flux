@@ -30,3 +30,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+  .home {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1640px;
+  }
+  
+</style>

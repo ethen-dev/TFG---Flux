@@ -91,27 +91,29 @@ export const taskStore = {
                 });
         },
         updateTasks({commit}, {flowId, value}) {
+            console.log(flowId)
+            console.log(value)
             const taskToUpdate = value.find(_ => _.flowId != flowId);
-            const originalFlow = taskToUpdate.flowId;
-
             if (value.length === 0 || !taskToUpdate) {return;}
             
+            const originalFlow = taskToUpdate.flowId;
+            
+            commit('spliceTask', {flowId: originalFlow, task: taskToUpdate});
             Vue.axios.patch(`${appConfig.apiUrl}/task/update/${taskToUpdate._id}`,
-                {
-                    flowId
-                },
-                {
-                    withCredentials: false
-                }
-            )
+            {
+                flowId
+            },
+            {
+                withCredentials: false
+            })
                 .then((res) => {
                     console.log(res.data)
                     const { data } = res.data;
                     commit('pushTasks', data.task);
-                    commit('spliceTask', {flowId: originalFlow, task: taskToUpdate});
                 })
                 .catch((err) => {
                     console.log(err);
+                    commit('pushTasks', taskToUpdate);
                 });
         },
         sendComment({commit}, {comment, taskId, owner, time, flowId}) {

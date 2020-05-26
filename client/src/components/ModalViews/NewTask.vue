@@ -1,5 +1,6 @@
 <template>
     <FormulateForm
+        class="new-task-container"
         v-model="formValues"
         @submit="createTask"
     >
@@ -11,7 +12,7 @@
         />
         <FormulateInput 
             name="taskDescription"
-            type="text" 
+            type="textarea" 
             label="Description"
             validation="required|min:3"
         />
@@ -126,5 +127,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+    .new-task-container {
+        width: 600px;
+    }
 </style>

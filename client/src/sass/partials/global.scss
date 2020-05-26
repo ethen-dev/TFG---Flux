@@ -1,0 +1,109 @@
+@import './variables';
+
+// Formulate Input styles
+
+.formulate-input-group {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.formulate-input {
+	margin-bottom: 27px;
+    margin-top: 12px;
+    min-width: 40%;
+	&[data-classification="box"] {
+		.formulate-input-wrapper {
+			display: flex;
+			align-items: center;
+			min-height: 16px;
+			.formulate-input-element {
+				display: flex;
+				align-items: center;
+				input {
+					display: none;
+					+ label {
+						display: inline-block;
+						width: 20px;
+						height: 20px;
+						margin: -1px 4px 0 0;
+						vertical-align: middle;
+						background: $grey-text;
+						background-size: cover;
+						cursor: pointer;
+                        border-radius: 2px;
+                        border: 3px solid $grey-text;
+					}
+					&:checked + label {
+                        background: $primary;
+                        border: 3px solid $grey-text;
+					}
+				}
+			}
+		}
+		label {
+			color: $grey-text;
+			margin-left: 15px;
+			margin-bottom: 0;
+			font-size: 12px;
+		}
+    }
+    &[data-classification="text"], &[data-classification="textarea"]  {
+        margin-bottom: 27px;
+        margin-top: 12px;
+        width: 100%;
+		.formulate-input-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            input, textarea {
+                width: 100%;
+                height: 40px;
+                background-color: $grey-text;
+                border: none;
+                border-radius: 4px;
+                color: white;
+                padding: 0 20px;
+                font-size: 14px;
+            }
+            textarea {
+                height: 180px;
+                padding: 20px;
+            }
+            label {
+                text-align: left;
+                font-weight: 400;
+                margin-bottom: 5px;
+            }
+        }
+    }
+    &[data-classification="select"] {
+        select {
+            width: 100%;
+            height: 40px;
+            color: white;
+            background-color: $grey-text;
+            border-radius: 4px;
+            cursor: pointer;
+            option {
+                min-height: 40px;
+
+            }
+        }
+    }
+    &[data-classification='button'] {
+        button {
+            padding: 10px 20px;
+            background-color: $primary_grey;
+            border-radius: 4px;
+            border: none;
+            color: $primary;
+            cursor: pointer;
+            &:hover {
+                background-color: $primary;
+                color: white;
+            }
+        }
+    }
+}

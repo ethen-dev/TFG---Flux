@@ -55,29 +55,37 @@
                 label="Save Task Changes"
             />
         </FormulateForm>
-        <FormulateForm
-            @submit="sendComment"
-        >
-            <FormulateInput 
-                v-model="comment"
-                name="comment"
-                type="textarea" 
-                label="Write a comment"
-                validation="min:3"
-            />
-            <FormulateInput
-                type="submit"
-                label="Send comment"
-            />
-        </FormulateForm>
-        <div class="comments-container">
-            <div 
-                class="comment"
-                :class="{self: $route.params.userId === comment.owner}"
-                v-for="comment in activeTask.comments"
-                :key="comment.id"
+        <div class="comment-section">
+            <FormulateForm
+                class="send-comment"
+                @submit="sendComment"
             >
-                {{new Date(comment.time)}}--{{comment.comment}}
+                <FormulateInput 
+                    v-model="comment"
+                    name="comment"
+                    type="textarea" 
+                    label="Write a comment"
+                    validation="min:3"
+                />
+                <FormulateInput
+                    type="submit"
+                    label="Send comment"
+                />
+            </FormulateForm>
+            <div class="comments-container">
+                <div 
+                    class="comment"
+                    :class="{self: $route.params.userId === comment.owner}"
+                    v-for="comment in activeTask.comments"
+                    :key="comment.id"
+                >
+                    <p>
+                        <span>
+                            {{getCommentDate(comment)}}
+                        </span>
+                        {{comment.comment}}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -138,7 +146,7 @@ export default {
         },
         boardMembers() {
             return this.members;
-        }
+        },
     },
     beforeMount() {
         this.loadBoardMembers();
@@ -168,11 +176,94 @@ export default {
                     }));
             })
             return obj;
+        },
+        getCommentDate(comment) {
+            const date = new Date(comment.time);
+            const day = date.getDate();
+            const month = date.getMonth()+1;
+            const year = date.getFullYear();
+            const hour = date.getHours();
+            const min = date.getMinutes();
+            return `${day}/${month}/${year} - ${hour > 10 ? hour : '0' + hour}:${min > 10 ? min : '0' + min}`;
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+    @import '../../sass/partials/variables';
 
+    .new-task-container {
+        display: flex;
+        .comment-section {
+            margin-left: 20px;
+            width: 600px;
+            display: flex;
+            flex-direction: column-reverse;
+            background-color: $primary;
+            .send-comment {
+                display: flex;
+                align-items: flex-end;
+                .formulate-input {
+                    min-width: auto;
+                    margin: 0 20px;
+                    margin-bottom: 5px;
+                    &[data-classification='textarea'] {
+                        textarea {
+                            height: 120px;
+                            background-color: white;
+                            color: $primary;
+                        }
+                        label {
+                            color: white
+                        }
+                    }
+                    &[data-classification='button'] {
+                        button {
+                            background-color: white;
+                            color: $primary;
+                            cursor: pointer;
+                            height: 120px;
+                            margin-bottom: 4px;;
+                            &:hover {
+                                background-color: #d3d3d3;
+                                color: $primary;
+                            }
+                        }
+                    }
+                }
+            }
+            .comments-container {
+                height: 100%;
+                padding: 15px;
+                .comment {
+                    width: 80%;
+                    padding: 5px 15px;
+                    background-color: #d3d3d3;
+                    border-radius: 4px;
+                    margin-bottom: 10px;
+                    position: relative;
+                    p { 
+                        display: flex;
+                        justify-content: space-between;
+                        text-align: left;
+                        span {
+                            white-space: nowrap;
+                            margin-right: 10px;
+                        }
+                    }
+                    &:nth-of-type(odd) {
+                        margin-left: auto;
+                        p {
+                            flex-direction: row-reverse;
+                            text-align: right;
+                            span {
+                                margin-left: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 </style>

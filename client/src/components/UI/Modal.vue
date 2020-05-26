@@ -53,16 +53,16 @@ export default {
             background-color: black;
             opacity: 0.8;
             width: 100%;
-            height: 100vh;
+            min-height: 100%;
             z-index: 0;
         }
         .modal-content {
-            padding: 29px 70px 35px 70px;
+            padding: 25px;
             border-radius: 4px;
             background-color: $modal_content_bg;
             position: absolute;
             top: 30%;
-            width: 380px;
+            max-width: 1200px;
             min-height: 240px;
             display: flex;
             justify-content: center;

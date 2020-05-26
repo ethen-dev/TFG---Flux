@@ -10,10 +10,17 @@ router
     .get(userController.getUsername)
 
 router
+    .route('/update/:userId')
+    .patch(userController.updateUser)
+
+router
     .route('/:email/:password')
-    .post(userController.createUser)
     .get(userController.authUser)
     .delete(userController.deleteUser)
+
+router
+    .route('/:email/:password/:userName')
+    .post(userController.createUser)
     
 router
     .route('/:token')

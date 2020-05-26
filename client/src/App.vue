@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<custom-header></custom-header>
+		<custom-header v-if="$route.path !== '/'"></custom-header>
 		<router-view/>
 		<transition name="fade">
 			<modal v-if="storedModalView"></modal>
@@ -54,15 +54,23 @@ export default {
 </script>
 
 <style lang="scss">
+	@import './sass/partials/variables';
+	@import './sass/main';
+
 	* {
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
+		font-family: 'Montserrat';
 	}
 
 	.view {
-		height: 100vh;
+		height: 100%;
 		padding: 25px;
+	}
+
+	body {
+		background-color: $primary_grey;
 	}
 
 	#app {
@@ -72,4 +80,5 @@ export default {
 		text-align: center;
 		color: #2c3e50;
 	}
+
 </style>

@@ -1,11 +1,15 @@
 <template>
 	<div 
 		id="board-item"
+		:class="{'add-board': board.name === '+'}"
 		@click="boardSubmitHandler"
 	>
-		<h1>
+		<p :class="{'type-box': board.name === '+'}">
 			{{board.name}}
-		</h1>
+		</p>
+		<dic class="type-box" v-if="board._id">
+			{{boardType}}
+		</dic>
 	</div>
 </template>
 
@@ -21,6 +25,10 @@ export default {
 	computed: {
 		userId() {
 			return this.$route.params.userId;
+		},
+		boardType() {
+			if(!this.board._id) {return '';}
+			return this.board.isScrum ? 'S': 'K';
 		}
 	},
 	methods: {
@@ -39,13 +47,43 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+	@import '../sass/partials/variables';
+
 	#board-item {
-		width: 150px;
-		height: 150px;
-		background-color: #d3d3d3;
+		min-width: 260px;
+		max-width: 260px;
+		height: 100px;
+		background-color: white;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		justify-content: space-between;
+		border-radius: 4px;
 		align-items: center;
+		font-weight: 600;
+		font-size: 14px;
+		padding: 20px 0;
+		margin: 0 8px;
+		margin-bottom: 35px;
 		cursor: pointer;
+		&.add-board {
+			justify-content: center;
+			.type-box{
+				width: 55px;
+				height: 55px;
+				border-radius: 4px;
+			}
+		}
+		.type-box {
+			width: 28px;
+			height: 28px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: $primary;
+			color: white;
+			font-weight: bold;
+			font-size: 13px;
+			border-radius: 4px;
+		}
 	}
 </style>

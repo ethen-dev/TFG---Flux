@@ -105,6 +105,17 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -359,8 +370,17 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"formValues.taskDescription\",\r\n    \"priority\": \"1\",\r\n    \"sprint\": \"\",\r\n    \"tags\": \"[]\",\r\n    \"assignedTo\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/api/task/create/5e91fe52244ef0002403cc27/tak1",
+							"raw": "localhost:8080/api/task/create/5eb97843a71021181cfebd02/nameaaaa",
 							"host": [
 								"localhost"
 							],
@@ -369,8 +389,8 @@
 								"api",
 								"task",
 								"create",
-								"5e91fe52244ef0002403cc27",
-								"tak1"
+								"5eb97843a71021181cfebd02",
+								"nameaaaa"
 							]
 						}
 					},

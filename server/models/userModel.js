@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     hasBoards: {
         type: Boolean,
         default: false
+    },
+    userName: {
+        type: String,
+        required: [true, 'userName Field must be filled'],
     }
 });
 

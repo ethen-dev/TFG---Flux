@@ -13,7 +13,7 @@ const boardRouter = require('./routes/boardRouter');
 const flowRouter = require('./routes/flowRouter');
 const taskRouter = require('./routes/taskRouter');
 const limiter = rateLimit({
-    max: 100,
+    max: 500,
     windowMs: 60 * 60 * 1000, //1h
     message: 'Too many request from this IP, try again in an hour.' 
 });
@@ -51,6 +51,7 @@ app.use('/api/user/token', userRouter)
 app.use('/api/user/logout', userRouter)
 app.use('/api/user/delete', userRouter)
 app.use('/api/user/get', userRouter)
+app.use('/api/user', userRouter)
 app.use('/api/board/create', boardRouter)
 app.use('/api/board/update', boardRouter)
 app.use('/api/board/getAll', boardRouter)

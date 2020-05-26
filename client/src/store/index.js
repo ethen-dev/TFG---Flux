@@ -38,7 +38,7 @@ export default new Vuex.Store({
 		axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}`)
 			.then((res) => {
 				const {data} = res.data;
-				commit('changeLoggedUser', {email: data.email, userId: data.id});
+				commit('changeLoggedUser', {email: data.email, userId: data.id, userName: data.userName});
 			})
 			.catch((err) => {
 				console.log(err);
@@ -50,7 +50,7 @@ export default new Vuex.Store({
 			.then((res) => {
 				console.log(res.data)
 				const {data} = res.data;
-				commit('changeLoggedUser', {email: data.email, userId: data.id});
+				commit('changeLoggedUser', {email: data.email, userId: data.id, userName: data.userName});
 			})
 			.catch((err) => {
 				console.log(err);
@@ -62,7 +62,7 @@ export default new Vuex.Store({
 			.then((res) => {
 				console.log(res.data)
 				const { data } = res.data;
-				commit('changeLoggedUser', { email: data.email, userId: data._id });
+				commit('changeLoggedUser', { email: data.email, userId: data._id, userName: data.userName});
 			})
 			.catch((err) => {
 				console.log(err);

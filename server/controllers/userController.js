@@ -27,7 +27,8 @@ exports.createUser = (req, res) => {
                     data: {
                         token,
                         email,
-                        id: doc._id
+                        id: doc._id,
+                        userName
                     }
                 });
         })
@@ -44,7 +45,7 @@ exports.createUser = (req, res) => {
 exports.authUser = async (req, res) => {
     try {
         const user = await User.findOne({email: req.params.email, password: req.params.password});
-        const {_id, email} = user;
+        const {_id, email, userName} = user;
         const token = jwt.sign({id: _id, email}, process.env.SECRET_KEY, {expiresIn: '90d'});
 
         if (!user) {
@@ -65,7 +66,8 @@ exports.authUser = async (req, res) => {
                 data: {
                     token,
                     _id,
-                    email
+                    email,
+                    userName
                 }
             });
     } catch (err) {
@@ -83,10 +85,12 @@ exports.authToken = async (req, res) => {
     try {
         const {token} = req.params;
         var decoded = jwt.verify(req.cookies[token], process.env.SECRET_KEY);
-        const {id, email} = decoded;
-
+        console.log(decoded)
+        console.log('------------')
+        
         const user = await User.findById(id);
-
+        const { id, email, userName} = user;
+        
         if (!user) {
             throw new Exception('User not found')
         }
@@ -130,6 +134,7 @@ exports.deleteUser = async (req, res) => {
                 data: null
             });
     } catch (err) {
+        console.log(err)
         res
             .status(400)
             .json({
