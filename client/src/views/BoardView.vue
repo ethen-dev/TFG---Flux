@@ -8,8 +8,12 @@
       />
       <flow-item
         v-if="!board.isScrum"
+        class="add"
         :flow="{name: '+'}"
       />
+    </div>
+    <div class="board-name">
+      {{board.name}}
     </div>
   </div>
 </template>
@@ -45,7 +49,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../sass/partials/variables';
+
 .flow-container {
   display: flex;
+}
+
+.board-name {
+  position: fixed;
+  bottom: 40px;
+  padding: 10px 25px;
+  min-width: 150px;
+  left: calc(50% - 75px);
+  border-radius: 4px;
+  background-color: $primary;
+  color: white;
 }
 </style>

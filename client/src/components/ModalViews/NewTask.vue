@@ -1,56 +1,59 @@
 <template>
-    <FormulateForm
-        class="new-task-container"
-        v-model="formValues"
-        @submit="createTask"
-    >
-        <FormulateInput 
-            name="taskName"
-            type="text" 
-            label="Title"
-            validation="required|min:3"
-        />
-        <FormulateInput 
-            name="taskDescription"
-            type="textarea" 
-            label="Description"
-            validation="required|min:3"
-        />
-        <FormulateInput 
-            name="priority"
-            type="select" 
-            value="0"
-            :options="{0: 'low', 1: 'min', 2: 'high'}"
-            label="priority"
-        />
-        <FormulateInput
-            name="sprint"
-            type="select"
-            value="0"
-            :options="sprints"
-            label="Assign to Sprint"
-        />
-        <FormulateInput
-            v-if="hasBoardCategories"
-            name="categories"
-            :options="boardCategories"
-            type="checkbox"
-            label="Select categories to this task:"
-        />
-        <p v-else>
-            Para poder asignar una categoria a la tarea, debes crearlas primero desde el tablero.
-        </p>
-        <FormulateInput
-            name="assignedTo"
-            :options="boardMembers"
-            type="select"
-            label="Assign this task to:"
-        />
-        <FormulateInput
-            type="submit"
-            label="Create Task"
-        />
-    </FormulateForm>
+    <div>
+        <h3>Crea una tarea</h3>
+        <FormulateForm
+            class="new-task-container"
+            v-model="formValues"
+            @submit="createTask"
+        >
+            <FormulateInput 
+                name="taskName"
+                type="text" 
+                label="Title"
+                validation="required|min:3"
+            />
+            <FormulateInput 
+                name="taskDescription"
+                type="textarea" 
+                label="Description"
+                validation="required|min:3"
+            />
+            <FormulateInput 
+                name="priority"
+                type="select" 
+                value="0"
+                :options="{0: 'low', 1: 'min', 2: 'high'}"
+                label="priority"
+            />
+            <FormulateInput
+                name="sprint"
+                type="select"
+                value="0"
+                :options="sprints"
+                label="Assign to Sprint"
+            />
+            <FormulateInput
+                v-if="hasBoardCategories"
+                name="categories"
+                :options="boardCategories"
+                type="checkbox"
+                label="Select categories to this task:"
+            />
+            <p v-else>
+                Para poder asignar una categoria a la tarea, debes crearlas primero desde el tablero.
+            </p>
+            <FormulateInput
+                name="assignedTo"
+                :options="boardMembers"
+                type="select"
+                label="Assign this task to:"
+            />
+            <FormulateInput
+                type="submit"
+                label="Create Task"
+            />
+        </FormulateForm>
+    </div>
 </template>
 
 <script>
@@ -129,5 +132,6 @@ export default {
 <style lang="scss" scoped>
     .new-task-container {
         width: 600px;
+        flex-direction: column;
     }
 </style>

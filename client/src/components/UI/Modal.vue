@@ -46,6 +46,12 @@ export default {
     #modal {
         display: flex;
         justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
         .modal-background {
             position: absolute;
             top: 0;
@@ -60,10 +66,12 @@ export default {
             padding: 25px;
             border-radius: 4px;
             background-color: $modal_content_bg;
-            position: absolute;
-            top: 30%;
             max-width: 1200px;
             min-height: 240px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;

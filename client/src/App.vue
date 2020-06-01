@@ -5,6 +5,15 @@
 		<transition name="fade">
 			<modal v-if="storedModalView"></modal>
 		</transition>
+		<div 
+			class="home-button" 
+			v-if="$route.params.boardId"
+			@click="$router.push(`/user/$route.params.userId`)"
+		>
+			<HomeVariant 
+				fill-color="#fff"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -12,11 +21,13 @@
 import { mapState } from 'vuex';
 import Modal from './components/UI/Modal';
 import CustomHeader from './components/UI/CustomHeader';
+import HomeVariant from 'vue-material-design-icons/HomeVariant';
 
 export default {
 	components: {
 		Modal,
-		CustomHeader
+		CustomHeader,
+		HomeVariant
 	},
 	data() {
 		return {
@@ -84,6 +95,23 @@ export default {
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
 		color: #2c3e50;
+	}
+
+	.home-button {
+		width: 60px;
+		height: 60px;
+		border-radius: 4px;
+		background-color: $primary;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: fixed;
+		bottom: 40px;
+		right: 40px;
+		cursor: pointer;
+		&:hover {
+			background-color: $grey_text;
+		}
 	}
 
 </style>

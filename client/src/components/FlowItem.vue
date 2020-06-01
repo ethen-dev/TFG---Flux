@@ -6,14 +6,14 @@
     <h1>
         {{flow.name}}
     </h1>
+    <div 
+        class="task"
+        @click="createTask"
+    >
+        +
+    </div>
     <vue-scroll :ops="scrollOptions" class="scrollable">
         <div class="task-container" @click="setActiveFlow">
-            <div 
-                class="task"
-                @click="createTask"
-            >
-                +
-            </div>
             <draggable group="flow" v-model="tasks" class="drag">
                 <task-item
                     v-for="task in tasks"
@@ -140,11 +140,20 @@ export default {
         }
         .task {
             width: 260px;
-            height: 60px;
+            height: 40px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: red;
+            background-color: #d3d3d3;
+            margin-bottom: 8px;
+            cursor: pointer;
+            &:hover {
+                background-color: #9e9b9b;
+                // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.19);
+            }
         }
     }
 </style>

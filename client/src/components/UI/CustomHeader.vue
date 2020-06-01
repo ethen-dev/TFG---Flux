@@ -1,30 +1,5 @@
 <template>
     <header id="nav">
-      <!-- <formulate-form 
-        v-if="!loggedUser"
-        class="login"
-        v-model="userFormData"
-      >
-        <formulate-input
-          name="email" 
-          type="text" 
-          label="email"
-        />
-        <formulate-input
-          name="password" 
-          type="password" 
-          label="Password"
-        />
-        <a href="javascript:void(0)" @click="signUp">Sign Up</a>
-		&nbsp;or&nbsp;
-		<a href="javascript:void(0)" @click="logIn">Log In</a>
-      </formulate-form>
-      <div 
-        v-else
-        class="user"
-      >
-        Hi, {{ loggedUser.email }} - <a href="javascript:void(0)" @click="logout">log out</a>
-      </div>   -->
 		<div class="navigation">
 			<img src="/assets/logo.svg" alt="flux logo">
 			<div class="filter-container" v-if="$route.params.boardId">
@@ -78,9 +53,17 @@
 				</span>
 			</div>
 			<div class="avatar-container">
-				<avatar>
+				<avatar @click.native="menuVisible = true" @blur="menuVisible = false">
 				</avatar>
-				Log out
+				<div class="logout">
+					Log out
+				</div>
+				<div class="menu" v-if="menuVisible">
+					<ul>
+						<li @click="$router.push(`/user/${$route.params.userId}`); menuVisible = false">Inicio</li>
+						<li @click="$router.push(`/edit-user/${$route.params.userId}`); menuVisible = false">Editar Usuario</li>
+					</ul>
+				</div>
 			</div>
 		</div>
     </header>
@@ -104,7 +87,8 @@ export default {
 			activeMember: '',
 			activeCategory: '',
 			categories: {},
-			members: {'': 'All'}
+			members: {'': 'All'},
+			menuVisible: false
 		}
 	},
 	computed: {
@@ -224,6 +208,7 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 
 		.navigation {
 			max-width: 1640px;
@@ -302,6 +287,41 @@ export default {
 
 			&.router-link-exact-active {
 				color: #42b983;
+			}
+		}
+		.avatar-container {
+			position: relative;
+			div {
+				cursor: pointer;
+			}
+			.logout {
+				padding-top: 10px;
+				cursor: pointer;
+				color: white;
+				&:hover {
+					color: $grey_text;
+				}
+			}
+			.menu {
+				min-width: 250px;
+				padding: 25px;
+				background-color: white;
+				position: absolute;
+				top: 80px;
+				right: 0;
+				border-radius: 4px;
+				ul {
+					list-style: none;
+					li {
+						text-align: left;
+						padding: 15px 15px;
+						border-radius: 4px;
+						&:hover {
+							background: $primary;
+							color: white;
+						}
+					}
+				}
 			}
 		}
 	}

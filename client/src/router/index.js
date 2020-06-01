@@ -24,7 +24,12 @@ const routes = [
     path: '/share/:boardId',
     name: 'Share Page',
     component: () => import('../views/ShareView')
-  }
+  },
+  {
+    path: '/edit-user/:userId',
+    name: 'User Edit Page',
+    component: () => import('../views/UserEdit')
+  },
 ]
 
 const router = new VueRouter({

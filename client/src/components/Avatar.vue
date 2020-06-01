@@ -26,5 +26,6 @@ export default {
         align-items: center;
         font-size: 24px;
         font-weight: bold;
+        color: white;
     }
 </style>

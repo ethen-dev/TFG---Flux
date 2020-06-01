@@ -5,21 +5,38 @@
             <h3>{{task.name}}</h3>
         </div>
         <div class="info-container">
-            <div class="info-target"></div>
-            <div class="info-target"></div>
-            <div class="info-target"></div>
-            <div class="info-target"></div>
+            <div class="info-target"><CheckboxBlankCircle class="icon" :fill-color="getFillColor()"/></div>
+            <div class="info-target"><span class="avatar">{{owner[0]}}</span></div>
+            <div class="info-target"><Paperclip class="icon disabled" fill-color="#fff"/></div>
+            <div class="info-target"><MessageText class="icon disabled" fill-color="#fff"/></div>
         </div>
     </div>
 </template>
 
 <script>
 import {mapState} from 'vuex';
+import {appConfig} from '../../config/config';
+import CheckboxBlankCircle from 'vue-material-design-icons/CheckboxBlankCircle.vue';
+import Paperclip from 'vue-material-design-icons/Paperclip.vue';
+import MessageText from 'vue-material-design-icons/MessageText.vue';
+import Vue from 'vue';
+
 export default {
+    components: {
+        CheckboxBlankCircle,
+        Paperclip,
+        MessageText
+    },
     props: {
         task: {
             type: Object,
             required: true
+        }
+    },
+    data() {
+        return {
+            iconCollor: '#fff',
+            owner: '-'
         }
     },
     computed: {
@@ -29,6 +46,29 @@ export default {
         board() {
             return this.boardStore.boards.filter(_ => _._id === this.$route.params.boardId)[0];
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.getTaskOwnerName();
+        }, 100)
+    },
+    methods: {
+        getFillColor() {
+            if (this.task.priority === 2) {
+                return '#F65353';
+            }
+            if (this.task.priority === 1) {
+                return '#FFEE06';
+            }
+            return '#ffffff';
+        },
+        getTaskOwnerName() {
+            if (!this.task.assignedTo) {return;}
+            Vue.axios.get(`${appConfig.apiUrl}/user/get/username/${this.task.assignedTo}`)
+                .then(res => {
+                    this.owner = res.data.data.userName;
+                });
+        },
     }
 }
 </script>
@@ -75,6 +115,22 @@ export default {
                 align-items: center;
                 background-color: $primary;
                 border-radius: 2px;
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    svg {
+                        width: 12px;
+                        height: 12px;
+                    }
+                }
+                .avatar {
+                    font-size: 10px;
+                    color: white;
+                    font-weight: bold;
+                }
             }
         }
     }

@@ -38,7 +38,7 @@
                 :options="boardCategories"
                 :value="activeTask.tags"
                 type="checkbox"
-                label="This is a label for all the options"
+                label="Categorias"
             />
             <p v-else>
                 Para poder asignar una categoria a la tarea, debes crearlas primero desde el tablero.
@@ -65,7 +65,6 @@
                     name="comment"
                     type="textarea" 
                     label="Write a comment"
-                    validation="min:3"
                 />
                 <FormulateInput
                     type="submit"
@@ -73,19 +72,27 @@
                 />
             </FormulateForm>
             <div class="comments-container">
-                <div 
-                    class="comment"
-                    :class="{self: $route.params.userId === comment.owner}"
-                    v-for="comment in activeTask.comments"
-                    :key="comment.id"
-                >
-                    <p>
-                        <span>
-                            {{getCommentDate(comment)}}
+                <vue-scroll :ops="scrollOptions" class="scrollable">
+                    <div 
+                        class="comment"
+                        :class="{self: $route.params.userId === comment.owner}"
+                        v-for="comment in activeTask.comments"
+                        :key="comment.id"
+                    >
+                        <span 
+                            class="comment-name"
+                            :class="{self: $route.params.userId === comment.owner}"
+                        >
+                            {{members[comment.owner]}}
                         </span>
-                        {{comment.comment}}
-                    </p>
-                </div>
+                        <p>
+                            <span>
+                                {{getCommentDate(comment)}}
+                            </span>
+                            {{comment.comment}}
+                        </p>
+                    </div>
+                </vue-scroll>
             </div>
         </div>
     </div>
@@ -101,7 +108,15 @@ export default {
         return {
             formValues: {},
             comment: '',
-            members: {'': '---'}
+            members: {'': '---'},
+            scrollOptions: {
+                mode: 'native',
+                sizeStrategy: 'percent',
+                detectResize: true,
+                bar: {
+                    background: '#d3d3d3'
+                }
+            }
         }
     },
     computed: {
@@ -157,6 +172,7 @@ export default {
             this.$store.dispatch('updateEditedTask', this.formValues);
         },
         sendComment() {
+            if (!this.comment.trim().length > 0) {return;}
             const comment = {
                 comment: this.comment,
                 time: new Date().getTime(),
@@ -164,7 +180,8 @@ export default {
                 taskId: this.activeTaskId,
                 flowId: this.flowActive 
             }
-            this.$store.dispatch('sendComment', comment)
+            this.$store.dispatch('sendComment', comment);
+            this.comment = '';
         },
         loadBoardMembers() {
             const members = this.getBoard(this.$route.params.boardId).members;
@@ -195,18 +212,24 @@ export default {
 
     .new-task-container {
         display: flex;
+        .formulate-input {
+            &[data-classification='box'] {
+                margin: 10px 0;
+            }
+        }
         .comment-section {
             margin-left: 20px;
             width: 600px;
             display: flex;
             flex-direction: column-reverse;
             background-color: $primary;
+            padding-bottom: 15px;
             .send-comment {
                 display: flex;
                 align-items: flex-end;
                 .formulate-input {
                     min-width: auto;
-                    margin: 0 20px;
+                    margin: 0 20px !important;
                     margin-bottom: 5px;
                     &[data-classification='textarea'] {
                         textarea {
@@ -236,12 +259,13 @@ export default {
             .comments-container {
                 height: 100%;
                 padding: 15px;
+                max-height: 690px;
                 .comment {
                     width: 80%;
                     padding: 5px 15px;
                     background-color: #d3d3d3;
                     border-radius: 4px;
-                    margin-bottom: 10px;
+                    margin: 25px 0;
                     position: relative;
                     p { 
                         display: flex;
@@ -261,6 +285,16 @@ export default {
                                 margin-left: 10px;
                             }
                         }
+                        .comment-name {
+                            right: 10px;
+                            left: initial;
+                        }
+                    }
+                    .comment-name {
+                        position: absolute;
+                        top: -20px;
+                        left: 10px;
+                        color: white;
                     }
                 }
             }

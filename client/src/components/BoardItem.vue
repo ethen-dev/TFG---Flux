@@ -67,10 +67,13 @@ export default {
 		cursor: pointer;
 		&.add-board {
 			justify-content: center;
+			background-color: $primary;
 			.type-box{
 				width: 55px;
 				height: 55px;
 				border-radius: 4px;
+				background-color: white;
+				color: $primary;
 			}
 		}
 		.type-box {

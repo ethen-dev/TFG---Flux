@@ -1,18 +1,21 @@
 <template>
-    <FormulateForm
-        v-model="formValues"
-        @submit="createFlow"
-    >
-        <FormulateInput 
-            name="flowName"
-            type="text" 
-            validation="required|min:5"
-        />
-        <FormulateInput
-            type="submit"
-            label="Create Flow"
-        />
-    </FormulateForm>
+    <div>
+        <h3>Añade una columna</h3>
+        <FormulateForm
+            v-model="formValues"
+            @submit="createFlow"
+        >
+            <FormulateInput 
+                name="flowName"
+                type="text" 
+                validation="required|min:5"
+            />
+            <FormulateInput
+                type="submit"
+                label="Create Flow"
+            />
+        </FormulateForm>
+    </div>
 </template>
 
 <script>

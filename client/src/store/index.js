@@ -27,6 +27,10 @@ export default new Vuex.Store({
 	},
 	resetStore(state) {
 		Object.assign(state, getDefaultState())
+	},
+	changeUpdatedLoggedUser(state, {userName, email}) {
+		state.loggedUser.userName = userName;
+		state.loggedUser.email = email;
 	}
   },
   actions: {
@@ -79,6 +83,23 @@ export default new Vuex.Store({
 			.catch((err) => {
 				console.log(err);
 			})
+	},
+	updateUser({commit, state}, {userName, email, password}) {
+		axios.patch(`${appConfig.apiUrl}/user/update/${state.loggedUser.userId}`,
+		{
+			userName,
+			email,
+			password
+		},
+		{
+			withCredentials: false
+		})
+		.then(() => {
+			commit('changeUpdatedLoggedUser', {userName, email})
+		})
+		.catch((err) => {
+			console.log(err);
+		})
 	},
 	openModal({commit}, modalName) {
 		commit('changeActiveModal', modalName);
