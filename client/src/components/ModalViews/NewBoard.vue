@@ -60,10 +60,12 @@ export default {
         createBoard() {
             if (this.formValues.type === 'kanban') {
                 this.$store.dispatch('createKanbanBoard', {formValues: this.formValues, userId: this.userId});
+                this.$store.dispatch('closeModal');
                 return;
             }
             this.$store.dispatch('openModal', 'ScrumFlow');
             sessionStorage.setItem('boardData', JSON.stringify({formValues: this.formValues, userId: this.userId}));
+            this.$store.dispatch('closeModal');
         }
     }
 }

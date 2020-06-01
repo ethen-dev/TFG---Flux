@@ -28,6 +28,7 @@ export default {
     methods: {
         createFlow() {
             this.$store.dispatch('createFlow', {formValues: this.formValues, boardId: this.$route.params.boardId});
+            this.$store.dispatch('closeModal');
         }
     }
 }

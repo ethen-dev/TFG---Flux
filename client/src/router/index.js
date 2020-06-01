@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import RootView from '../views/RootView.vue'
+import BoardView from '../views/BoardView.vue'
+import UserHomeView from '../views/UserHomeView.vue'
+import UserEdit from '../views/UserEdit.vue'
 
 Vue.use(VueRouter)
 
@@ -13,22 +16,22 @@ const routes = [
   {
     path: '/user/:userId/board/:boardId',
     name: 'User Board View',
-    component: () => import('../views/BoardView')
+    component: BoardView
   },
   {
     path: '/user/:userId',
     name: 'User Home Page',
-    component: () => import('../views/UserHomeView')
+    component: UserHomeView
   },
   {
     path: '/share/:boardId',
     name: 'Share Page',
-    component: () => import('../views/ShareView')
+    component: RootView
   },
   {
     path: '/edit-user/:userId',
     name: 'User Edit Page',
-    component: () => import('../views/UserEdit')
+    component: UserEdit
   },
 ]
 

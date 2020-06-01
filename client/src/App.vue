@@ -1,14 +1,14 @@
 <template>
 	<div id="app">
-		<custom-header v-if="$route.path !== '/'"></custom-header>
-		<router-view/>
+		<custom-header v-if="$route.path !== '/' && !$route.path.includes('share')"></custom-header>
+		<router-view :not-account-detected="notAccountDetected"/>
 		<transition name="fade">
 			<modal v-if="storedModalView"></modal>
 		</transition>
 		<div 
 			class="home-button" 
 			v-if="$route.params.boardId"
-			@click="$router.push(`/user/$route.params.userId`)"
+			@click="$router.push(`/user/${$route.params.userId}`)"
 		>
 			<HomeVariant 
 				fill-color="#fff"
@@ -31,6 +31,7 @@ export default {
 	},
 	data() {
 		return {
+			notAccountDetected: false
 		}
 	},
 	computed: {
@@ -48,21 +49,41 @@ export default {
 			return this.app.storedModalView;
 		}
 	},
-	watch: {
-		loggedUser: {
-			handler: function(newValue) {
-				this.$store.dispatch('getBoards', newValue.userId);
-				// this.$router.push(`/user/${newValue.userId}`)
-			},
-			deep: true
-		}
-	},
+	// watch: {
+	// 	loggedUser: {
+	// 		handler: function(newValue) {
+	// 			// this.$store.dispatch('getBoards', newValue.userId);
+	// 			// this.$router.push(`/user/${newValue.userId}`)
+	// 		},
+	// 		deep: true
+	// 	}
+	// },
 	async mounted() {
 		this.$store.dispatch('autoLogin').then((res) => {
+			console.log(this.$route.path.includes('share'))
+			if (this.$route.path.includes('share')) {
+				// console.log('//')
+				const data = {
+					userId: res.data.data.id,
+					boardId: this.$route.params.boardId
+				}
+				this.$store.dispatch('addMember', data);
+				setTimeout(() => {
+					this.$router.push({
+						path: `/user/${res.data.data.id}`
+					});
+				}, 500);
+				return;
+			}
 			if (this.$route.path !== '/') {return;}
 			this.$router.push({
 				path: `/user/${res.data.data.id}`
-			})
+			});
+		}).catch(() => {
+			if (this.$route.path.includes('share')) {
+				console.log('share')
+				this.notAccountDetected = true
+			}
 		})
 	},
 	

@@ -69,6 +69,10 @@ exports.updateBoard = async (req, res) => {
                 new: true,
                 runValidators: true
             });
+            user = await User.findByIdAndUpdate(userId, { hasBoards: true }, {
+                new: true,
+                runValidators: true
+            });
         } 
 
         if (category) {
@@ -126,7 +130,8 @@ exports.getAllBoards = async (req, res) => {
 
         res 
             .status(200)
-            .json({
+            .json(
+            {
                 status: 'success',
                 message: 'User boards successfully readed',
                 data: {
@@ -137,7 +142,8 @@ exports.getAllBoards = async (req, res) => {
     } catch (err) {
         res
             .status(400)
-            .json({
+            .json(
+            {
                 status: 'fail',
                 message: err
             });

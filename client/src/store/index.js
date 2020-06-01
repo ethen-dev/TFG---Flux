@@ -37,18 +37,19 @@ export default new Vuex.Store({
 	resetStores({commit}) {
 		commit('resetStore');
 	},
-	signup({commit}, {email, password}) {
+	async signup({commit}, {email, password, userName}) {
 		axios.defaults.withCredentials = true;
-		axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}`)
+		return axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}/${userName}`)
 			.then((res) => {
 				const {data} = res.data;
 				commit('changeLoggedUser', {email: data.email, userId: data.id, userName: data});
+				return res;
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	},
-	autoLogin({commit}) {
+	async autoLogin({commit}) {
 		axios.defaults.withCredentials = true;
 		return axios.get(`${appConfig.apiUrl}/user/token/tfg-jwt`)
 			.then((res) => {
@@ -58,10 +59,10 @@ export default new Vuex.Store({
 				return res;
 			})
 			.catch((err) => {
-				console.log(err);
+				throw err;
 			})
 	},
-	login({ commit }, {email, password}) {
+	async login({ commit }, {email, password}) {
 		axios.defaults.withCredentials = true;
 		return axios.get(`${appConfig.apiUrl}/user/auth/${email}/${md5(password)}`)
 			.then((res) => {

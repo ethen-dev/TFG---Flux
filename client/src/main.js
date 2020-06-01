@@ -6,11 +6,14 @@ import store from './store'
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import VueFormulate from '@braid/vue-formulate';
+import { es } from '@braid/vue-formulate-i18n';
 import vuescroll from 'vuescroll';
 
 Vue.config.productionTip = false
 
-Vue.use(VueFormulate);
+Vue.use(VueFormulate, {
+  plugins: [es]
+});
 Vue.use(VueAxios, axios);
 Vue.use(vuescroll);
 

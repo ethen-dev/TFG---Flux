@@ -2,7 +2,24 @@
     <header id="nav">
 		<div class="navigation">
 			<img src="/assets/logo.svg" alt="flux logo">
-			<div class="filter-container" v-if="$route.params.boardId">
+			<div class="button" @click="showFilters = !showFilters" v-if="$route.params.boardId ">
+				Filtros
+			</div>
+			<div class="avatar-container">
+				<avatar @click.native="menuVisible = !menuVisible">
+				</avatar>
+				<div class="logout" @click="logout">
+					Log out
+				</div>
+				<div class="menu" v-if="menuVisible">
+					<ul>
+						<li @click="$router.push(`/user/${$route.params.userId}`); menuVisible = false">Inicio</li>
+						<li @click="$router.push(`/edit-user/${$route.params.userId}`); menuVisible = false">Editar Usuario</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="filter-container" v-if="$route.params.boardId && showFilters">
 				<FormulateForm
 					v-model="categories"
 					@submit="addCategory"
@@ -48,24 +65,10 @@
 				>
 					Comparte el tablero
 				</div>
-				<span class="share" v-if="boardUrl">	
-					Comparte este enlace para añadir miembors al tablero: {{boardUrl}}
-				</span>
 			</div>
-			<div class="avatar-container">
-				<avatar @click.native="menuVisible = true" @blur="menuVisible = false">
-				</avatar>
-				<div class="logout">
-					Log out
-				</div>
-				<div class="menu" v-if="menuVisible">
-					<ul>
-						<li @click="$router.push(`/user/${$route.params.userId}`); menuVisible = false">Inicio</li>
-						<li @click="$router.push(`/edit-user/${$route.params.userId}`); menuVisible = false">Editar Usuario</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+			<span class="share" v-if="boardUrl">	
+				{{boardUrl}}
+			</span>
     </header>
 </template>
 
@@ -88,7 +91,8 @@ export default {
 			activeCategory: '',
 			categories: {},
 			members: {'': 'All'},
-			menuVisible: false
+			menuVisible: false,
+			showFilters: true
 		}
 	},
 	computed: {
@@ -128,6 +132,8 @@ export default {
 				setTimeout(() => {
 					this.loadBoardMembers();
 				}, 500);
+				this.boardUrl = '';
+				this.showFilters = false;
 			}
 		}
 	},
@@ -147,6 +153,7 @@ export default {
 		},
 		logout() {
 			this.$store.dispatch('logout');
+			this.$router.push('/');
 		},
 		addSprint() {
 			let sprints = this.board.sprints || [];
@@ -206,76 +213,62 @@ export default {
 		width: 100%;
 		padding: 30px;
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		position: relative;
-
-		.navigation {
-			max-width: 1640px;
-			width: 100%;
-			height: 160px;
+		.filter-container {
 			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			img {
-				width: 200px;
-				height: 150px;
-			}
-			.filter-container {
-				display: flex;
-				justify-content: flex-start;
-				align-items: flex-end;
-				.formulate-input {
-					min-width: auto;
-					margin: 0 20px;
-					.formulate-input-wrapper {
-						display: flex;
-						flex-direction: column;
-						align-items: flex-start;
+			justify-content: flex-start;
+			align-items: flex-end;
+			flex-wrap: wrap;
+			.formulate-input {
+				min-width: auto;
+				margin: 0 20px;
+				.formulate-input-wrapper {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-start;
+				}
+				&[data-classification='select'] {
+					select {
+						width: 150px;
+						height: 42px;
+						margin-top: 4px;
 					}
-					&[data-classification='select'] {
-						select {
-							width: 150px;
-							height: 42px;
-							margin-top: 4px;
-						}
-						label {
-							color: white;
-						}
+					label {
+						color: white;
 					}
-					&[data-classification='text'] {
-						input {
-							width: 100%;
-						}
-						label {
-							color: white;
-						}
+				}
+				&[data-classification='text'] {
+					input {
+						width: 100%;
+					}
+					label {
+						color: white;
 					}
 				}
 			}
-			.button {
-				padding: 10px 20px;
-				background-color: white;
-				border-radius: 4px;
-				border: 1px solid white;
-				color: $primary;
-				cursor: pointer;
-				height: max-content;
-				&:hover {
-					background-color: $primary;
-					border: 1px solid white;
-					color: white;
-				}
-			}
-			.share {
-				position: absolute;
-				padding: 10px 20px;
-				background: white;
-				border-radius: 4px;
-				top: 160px;
-
-			}
+	}
+	.share {
+		padding: 10px 20px;
+		background: white;
+		border-radius: 4px;
+		margin-top: 15px;
+		overflow-wrap: anywhere;
+	}
+	.navigation {
+		max-width: 1640px;
+		width: 100%;
+		height: 160px;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		img {
+			width: 20%;
+			height: 150px;
 		}
+	}
 
 		.login {
 			display: flex;
@@ -291,6 +284,10 @@ export default {
 		}
 		.avatar-container {
 			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
 			div {
 				cursor: pointer;
 			}
@@ -322,6 +319,20 @@ export default {
 						}
 					}
 				}
+			}
+		}
+		.button {
+			padding: 10px 20px;
+			background-color: white;
+			border-radius: 4px;
+			border: 1px solid white;
+			color: $primary;
+			cursor: pointer;
+			height: max-content;
+			&:hover {
+				background-color: $primary;
+				border: 1px solid white;
+				color: white;
 			}
 		}
 	}

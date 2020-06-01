@@ -90,6 +90,7 @@ export default {
         }
     },
     createTask() {
+        this.setActiveFlow();
         this.$store.dispatch('openModal', 'NewTask');
     },
     getTasks() {
@@ -119,12 +120,12 @@ export default {
         justify-content: flex-start;
         align-items: center;
         margin: 0 20px;
-        min-height: 70vh;
+        min-height: 40vh;
         .drag {
             min-height: 60vh;
         }
         .scrollable {
-            max-height: 65vh;
+            max-height: 50vh;
         }
         h1 {
             width: 100%;

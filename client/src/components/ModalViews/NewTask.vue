@@ -113,6 +113,7 @@ export default {
     methods: {
         createTask() {
             this.$store.dispatch('createTask', {formValues: this.formValues, flowId: this.flowActive});
+            this.$store.dispatch('closeModal');
         },
         loadBoardMembers() {
             const members = this.getBoard(this.$route.params.boardId).members;

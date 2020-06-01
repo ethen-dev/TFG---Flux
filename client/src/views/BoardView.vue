@@ -1,5 +1,8 @@
 <template>
   <div class="view board" v-if="board">
+    <div class="board-name">
+      {{board.name}}
+    </div>
     <div class="flow-container">
       <flow-item
         v-for="flow in flows"
@@ -11,9 +14,6 @@
         class="add"
         :flow="{name: '+'}"
       />
-    </div>
-    <div class="board-name">
-      {{board.name}}
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
 			return this.getBoard(this.$route.params.boardId);
 		},
   },
-  beforeCreate() {
+  mounted() {
     this.$store.dispatch('getFlows', this.$route.params.boardId);
   }
 }
@@ -51,18 +51,24 @@ export default {
 <style lang="scss" scoped>
 @import '../sass/partials/variables';
 
+.board {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .flow-container {
   display: flex;
+  overflow: scroll;
 }
 
 .board-name {
-  position: fixed;
-  bottom: 40px;
   padding: 10px 25px;
   min-width: 150px;
-  left: calc(50% - 75px);
   border-radius: 4px;
   background-color: $primary;
   color: white;
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 </style>

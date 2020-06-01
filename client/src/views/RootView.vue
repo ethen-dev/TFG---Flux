@@ -4,11 +4,22 @@
             <img src="/assets/logo.svg" alt="flux-logo">
         </div>
         <div class="right">
-            <div v-if="step === 0">
+            <div v-if="step === 0 &&!$route.path.includes('share')">
                 <h1>Bienvenido a Flux!</h1>
                 <p>Aqui podras crear de forma completamente gratuita tableros Kanban y Scrum con los que podras realizar de forma mas productiva tus futuros proyectos.
                 </p>
                 <p>Solo estas un un paso de formar parte de la familia, unicamente has de crear una cuenta y empezar a disfrutar de todas las ventajas que ofrecemos.</p>
+                <div class="user-actions">
+                    <div class="button" @click="step = 1">Crear Cuenta</div>
+                    <div class="button secondary" @click="step = 2">Log In</div>
+                </div>
+            </div>
+            <div v-if="step === 0 && $route.path.includes('share') && notAccountDetected">
+                <h1>Bienvenido a Flux!</h1>
+                <p>
+                    Hemos detectado que intentas unirte a un tablero compartido.
+                    Al parecer no estas registrado con ninguna cuenta, debes tener una cuenta antes de continuar.
+                </p>
                 <div class="user-actions">
                     <div class="button" @click="step = 1">Crear Cuenta</div>
                     <div class="button secondary" @click="step = 2">Log In</div>
@@ -23,6 +34,11 @@
                         name="email" 
                         type="text" 
                         label="email"
+                    />
+                    <formulate-input
+                        name="userName" 
+                        type="text" 
+                        label="Nombre de usuario"
                     />
                     <formulate-input
                         name="password" 
@@ -68,19 +84,55 @@
 
 <script>
 export default {
+    props: {
+        notAccountDetected: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             step: 0,
-            userFormData: {}
+            userFormData: {},
         }
     },
     methods: {
         signUp() {
-			this.$store.dispatch('signup', this.userFormData);
+            this.$store.dispatch('signup', this.userFormData).then((res) => {     
+                if (this.notAccountDetected) {
+                    console.log(res)
+                    const data = {
+                        userId: res.data.data.id,
+                        boardId: this.$route.params.boardId
+                    }
+                    this.$store.dispatch('addMember', data);
+                    setTimeout(() => {
+                        this.$router.push({
+                            path: `/user/${res.data.data.id}`
+                        });
+                    }, 500);
+                    return;
+                }
+                this.$router.push({
+                    path: `/user/${res.data.data.id}`
+                })
+            })
 		},
 		logIn() {
-			this.$store.dispatch('login', this.userFormData).then((res) => {
-                console.log(res)
+            this.$store.dispatch('login', this.userFormData).then((res) => {
+                if (this.notAccountDetected) {
+                    const data = {
+                        userId: res.data.data._id,
+                        boardId: this.$route.params.boardId
+                    }
+                    this.$store.dispatch('addMember', data);
+                    setTimeout(() => {
+                        this.$router.push({
+                            path: `/user/${res.data.data.id}`
+                        });
+                    }, 500);
+                    return;
+                }
                 this.$router.push({
                     path: `user/${res.data.data._id}`
                 })

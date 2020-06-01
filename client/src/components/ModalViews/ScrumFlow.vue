@@ -39,6 +39,7 @@ export default {
             const scrumBoardData = {formValues, userId: this.$route.params.userId, flowValues: this.formValues};
             console.log(scrumBoardData)
             this.$store.dispatch('createScrumBoard', scrumBoardData);
+            this.$store.dispatch('closeModal');
         }
     }
 }

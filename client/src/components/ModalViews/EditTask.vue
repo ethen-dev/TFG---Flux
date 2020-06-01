@@ -170,6 +170,7 @@ export default {
         saveTaskChanges() {
             this.formValues.flowId = this.flowActive;
             this.$store.dispatch('updateEditedTask', this.formValues);
+            this.$store.dispatch('closeModal');
         },
         sendComment() {
             if (!this.comment.trim().length > 0) {return;}
