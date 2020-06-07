@@ -51,7 +51,7 @@ export default new Vuex.Store({
 	},
 	async autoLogin({commit}) {
 		axios.defaults.withCredentials = true;
-		return axios.get(`${appConfig.apiUrl}/user/token/tfg-jwt`)
+		return axios.get(`${appConfig.apiUrl}/user/token/tfg-jwt`,{}, {withCredentials: false})
 			.then((res) => {
 				console.log(res.data)
 				const {data} = res.data;
