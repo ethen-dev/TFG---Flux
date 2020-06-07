@@ -59,7 +59,10 @@ export default {
 
 .flow-container {
   display: flex;
-  overflow: scroll;
+  @media (max-width: 768px) {
+    display: -webkit-box;
+    overflow: scroll;
+  }
 }
 
 .board-name {

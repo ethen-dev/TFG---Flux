@@ -121,6 +121,7 @@ export default {
         align-items: center;
         margin: 0 20px;
         min-height: 40vh;
+        overflow: hidden;
         .drag {
             min-height: 60vh;
         }
@@ -129,6 +130,7 @@ export default {
         }
         h1 {
             width: 100%;
+            padding: 0 10px;
             height: 60px;
             background-color: $primary;
             color: white;
@@ -138,6 +140,8 @@ export default {
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            text-overflow: ellipsis;
+            word-break:break-all;
         }
         .task {
             width: 260px;

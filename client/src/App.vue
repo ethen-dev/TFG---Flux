@@ -7,7 +7,7 @@
 		</transition>
 		<div 
 			class="home-button" 
-			v-if="$route.params.boardId"
+			v-if="$route.params.boardId || $route.path.includes('edit')"
 			@click="$router.push(`/user/${$route.params.userId}`)"
 		>
 			<HomeVariant 

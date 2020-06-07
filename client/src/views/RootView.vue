@@ -34,19 +34,27 @@
                         name="email" 
                         type="text" 
                         label="email"
+                        validation="required"
                     />
                     <formulate-input
                         name="userName" 
                         type="text" 
                         label="Nombre de usuario"
+                        validation="required|min:5"
                     />
                     <formulate-input
                         name="password" 
                         type="password" 
                         label="Password"
+                        validation="required"
                     />
                     <formulate-input
-                        name="password" 
+                        name="repassword" 
+                        type="password" 
+                        label="Confirma el Password"
+                        :validation="`required|matches:${userFormData.password}`"
+                    />
+                    <formulate-input
                         type="submit" 
                         label="Crear Cuenta"
                     />
@@ -151,6 +159,10 @@ export default {
         align-items: center;
         background-color: $primary;
         height: 100vh;
+        flex-wrap: wrap;
+        .left {
+            min-width: 370px;
+        }
         .left, .right {
             flex: 1;
         }
@@ -158,19 +170,23 @@ export default {
             h1 {
                 max-width: 50%;
                 color: white;
+                margin: 0 auto;
                 margin-bottom: 20px;
             }
             p {
                 max-width: 50%;
-                margin-bottom: 20px;
                 text-align: justify;
                 color: white;
+                margin: 0 auto;
+                margin-bottom: 20px;
             }
 
             .user-actions {
                 display: flex;
                 justify-content: space-around;
                 max-width: 50%;
+                flex-wrap: wrap;
+                margin: 0 auto;
             }
             .button {
 				padding: 10px 20px;

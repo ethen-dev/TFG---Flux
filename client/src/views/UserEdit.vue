@@ -20,14 +20,14 @@
                     <formulate-input
                         name="password" 
                         type="password" 
-                        label="Password Nueva"
+                        label="Nueva Password"
                         validation="required"
                     />
                     <formulate-input
                         name="repassword" 
                         type="password" 
                         label="Repetir password"
-                        validation="required"
+                        :validation="`required|matches:${userFormData.password}`"
                     />
                     <formulate-input
                         type="submit" 

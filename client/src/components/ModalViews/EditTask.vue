@@ -213,6 +213,10 @@ export default {
 
     .new-task-container {
         display: flex;
+        @media (max-width: 768px) {
+            width: 100%;
+            flex-direction: column;
+        }
         .formulate-input {
             &[data-classification='box'] {
                 margin: 10px 0;
@@ -225,6 +229,10 @@ export default {
             flex-direction: column-reverse;
             background-color: $primary;
             padding-bottom: 15px;
+            @media (max-width: 768px) {
+                width: 100%;
+                margin: 0;
+            }
             .send-comment {
                 display: flex;
                 align-items: flex-end;
@@ -272,6 +280,7 @@ export default {
                         display: flex;
                         justify-content: space-between;
                         text-align: left;
+                        word-break: break-all;
                         span {
                             white-space: nowrap;
                             margin-right: 10px;
