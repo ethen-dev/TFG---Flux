@@ -21,7 +21,7 @@ const limiter = rateLimit({
 // Middleware - Is executed between every request -> dont forget to use next() at the end
 
 // Set secure HTTP headers
-app.use(helmet())
+// app.use(helmet())
 // https://expressjs.com/en/resources/middleware/cors.html
 app.use(cors());
 // Reading JSON on body request
