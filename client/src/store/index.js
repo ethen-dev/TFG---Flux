@@ -39,7 +39,7 @@ export default new Vuex.Store({
 	},
 	async signup({commit}, {email, password, userName}) {
 		axios.defaults.withCredentials = true;
-		return axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}/${userName}`)
+		return axios.post(`${appConfig.apiUrl}/user/create/${email}/${md5(password)}/${userName}`, {}, { withCredentials: false })
 			.then((res) => {
 				const {data} = res.data;
 				commit('changeLoggedUser', {email: data.email, userId: data.id, userName: data});
