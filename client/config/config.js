@@ -1,3 +1,3 @@
 export const appConfig = {
-    apiUrl: 'http://flux.lupoiu.com:8080/api'
+    apiUrl: 'flux.lupoiu.com:8080/api'
 }
